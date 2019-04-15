@@ -155,22 +155,19 @@ static inline void device_get_compute_mode(nvmlDevice_t device)
 extern "C" SEXP R_smi()
 {
   SEXP ret, ret_names;
+  SEXP ret_df, ret_df_names, ret_df_rownames;
   SEXP ret_version;
   SEXP ret_name, ret_busid, ret_persistence_mode, ret_disp;
   SEXP ret_speed, ret_temp, ret_perf, ret_power, ret_power_max, ret_memory_used,
     ret_memory_total, ret_utilization, ret_compute_mode;
   
-  // init
   nvml_init();
   
-  // driver
   system_get_driver_version();
   PROTECT(ret_version = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret_version, 0, mkChar(str));
   
-  // card statistics
   unsigned int num_gpus = device_get_count();
-  
   PROTECT(ret_name = allocVector(STRSXP, num_gpus));
   PROTECT(ret_busid = allocVector(STRSXP, num_gpus));
   PROTECT(ret_persistence_mode = allocVector(LGLSXP, num_gpus));
@@ -220,41 +217,55 @@ extern "C" SEXP R_smi()
   
   nvml_shutdown();
   
-  int nret = 14;
-  int n = 0;
-  PROTECT(ret = allocVector(VECSXP, nret));
-  PROTECT(ret_names = allocVector(STRSXP, nret));
+  
+  PROTECT(ret = allocVector(VECSXP, 2));
+  PROTECT(ret_names = allocVector(STRSXP, 2));
   setAttrib(ret, R_NamesSymbol, ret_names);
   
-  SET_VECTOR_ELT(ret, n, ret_version);
-  SET_STRING_ELT(ret_names, n++, mkChar("version"));
-  SET_VECTOR_ELT(ret, n, ret_name);
-  SET_STRING_ELT(ret_names, n++, mkChar("name"));
-  SET_VECTOR_ELT(ret, n, ret_busid);
-  SET_STRING_ELT(ret_names, n++, mkChar("busid"));
-  SET_VECTOR_ELT(ret, n, ret_persistence_mode);
-  SET_STRING_ELT(ret_names, n++, mkChar("persistence_mode"));
-  SET_VECTOR_ELT(ret, n, ret_disp);
-  SET_STRING_ELT(ret_names, n++, mkChar("disp"));
-  SET_VECTOR_ELT(ret, n, ret_speed);
-  SET_STRING_ELT(ret_names, n++, mkChar("speed"));
-  SET_VECTOR_ELT(ret, n, ret_temp);
-  SET_STRING_ELT(ret_names, n++, mkChar("temp"));
-  SET_VECTOR_ELT(ret, n, ret_perf);
-  SET_STRING_ELT(ret_names, n++, mkChar("perf"));
-  SET_VECTOR_ELT(ret, n, ret_power);
-  SET_STRING_ELT(ret_names, n++, mkChar("power"));
-  SET_VECTOR_ELT(ret, n, ret_power_max);
-  SET_STRING_ELT(ret_names, n++, mkChar("power_max"));
-  SET_VECTOR_ELT(ret, n, ret_memory_used);
-  SET_STRING_ELT(ret_names, n++, mkChar("memory_used"));
-  SET_VECTOR_ELT(ret, n, ret_memory_total);
-  SET_STRING_ELT(ret_names, n++, mkChar("memory_total"));
-  SET_VECTOR_ELT(ret, n, ret_utilization);
-  SET_STRING_ELT(ret_names, n++, mkChar("utilization"));
-  SET_VECTOR_ELT(ret, n, ret_compute_mode);
-  SET_STRING_ELT(ret_names, n++, mkChar("compute_mode"));
+  PROTECT(ret_df = allocVector(VECSXP, 13));
+  PROTECT(ret_df_names = allocVector(STRSXP, 13));
+  PROTECT(ret_df_rownames = allocVector(INTSXP, num_gpus));
+  for (int i=0; i<num_gpus; i++)
+    INTEGER(ret_df_rownames)[i] = i+1;
   
-  UNPROTECT(nret+2);
+  setAttrib(ret_df, R_NamesSymbol, ret_df_names);
+  setAttrib(ret_df, R_RowNamesSymbol, ret_df_rownames);
+  setAttrib(ret_df, R_ClassSymbol, mkString("data.frame"));
+  
+  SET_VECTOR_ELT(ret, 0, ret_version);
+  SET_STRING_ELT(ret_names, 0, mkChar("version"));
+  
+  SET_VECTOR_ELT(ret, 1, ret_df);
+  SET_STRING_ELT(ret_names, 1, mkChar("gpus"));
+  
+  int n = 0;
+  SET_VECTOR_ELT(ret_df, n, ret_name);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("name"));
+  SET_VECTOR_ELT(ret_df, n, ret_busid);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("busid"));
+  SET_VECTOR_ELT(ret_df, n, ret_persistence_mode);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("persistence_mode"));
+  SET_VECTOR_ELT(ret_df, n, ret_disp);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("disp"));
+  SET_VECTOR_ELT(ret_df, n, ret_speed);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("speed"));
+  SET_VECTOR_ELT(ret_df, n, ret_temp);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("temp"));
+  SET_VECTOR_ELT(ret_df, n, ret_perf);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("perf"));
+  SET_VECTOR_ELT(ret_df, n, ret_power);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("power"));
+  SET_VECTOR_ELT(ret_df, n, ret_power_max);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("power_max"));
+  SET_VECTOR_ELT(ret_df, n, ret_memory_used);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("memory_used"));
+  SET_VECTOR_ELT(ret_df, n, ret_memory_total);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("memory_total"));
+  SET_VECTOR_ELT(ret_df, n, ret_utilization);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("utilization"));
+  SET_VECTOR_ELT(ret_df, n, ret_compute_mode);
+  SET_STRING_ELT(ret_df_names, n++, mkChar("compute_mode"));
+  
+  UNPROTECT(18);
   return ret;
 }

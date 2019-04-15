@@ -68,6 +68,13 @@ static inline void device_get_name(nvmlDevice_t device)
   CHECK_NVML( nvmlDeviceGetName(device, str, STRLEN) );
 }
 
+static inline int device_get_persistence_mode(nvmlDevice_t device)
+{
+  nvmlEnableState_t mode;
+  CHECK_NVML( nvmlDeviceGetPersistenceMode(device, &mode) );
+  return (int) mode;
+}
+
 static inline int device_get_display_active(nvmlDevice_t device)
 {
   nvmlEnableState_t disp;
@@ -111,6 +118,14 @@ static inline int device_Get_power_max(nvmlDevice_t device)
   return (int) power_max;
 }
 
+static inline void device_get_memory_info(nvmlDevice_t device, double *memory_used, double *memory_total)
+{
+  nvmlMemory_t memory;
+  CHECK_NVML( nvmlDeviceGetMemoryInfo(device, &memory) );
+  *memory_used = (double) memory.used;
+  *memory_total = (double) memory.total;
+}
+
 static inline int device_get_utilization(nvmlDevice_t device)
 {
   nvmlUtilization_t utilization;
@@ -141,9 +156,9 @@ extern "C" SEXP R_smi()
 {
   SEXP ret, ret_names;
   SEXP ret_version;
-  SEXP ret_name, ret_busid, ret_disp;
+  SEXP ret_name, ret_busid, ret_persistence_mode, ret_disp;
   SEXP ret_speed, ret_temp, ret_perf, ret_power, ret_power_max, ret_memory_used,
-    ret_memory_total, ret_utilization, ret_mode;
+    ret_memory_total, ret_utilization, ret_compute_mode;
   
   // init
   nvml_init();
@@ -158,6 +173,7 @@ extern "C" SEXP R_smi()
   
   PROTECT(ret_name = allocVector(STRSXP, num_gpus));
   PROTECT(ret_busid = allocVector(STRSXP, num_gpus));
+  PROTECT(ret_persistence_mode = allocVector(LGLSXP, num_gpus));
   PROTECT(ret_disp = allocVector(LGLSXP, num_gpus));
   PROTECT(ret_speed = allocVector(INTSXP, num_gpus));
   PROTECT(ret_temp = allocVector(INTSXP, num_gpus));
@@ -167,7 +183,7 @@ extern "C" SEXP R_smi()
   PROTECT(ret_memory_used = allocVector(REALSXP, num_gpus));
   PROTECT(ret_memory_total = allocVector(REALSXP, num_gpus));
   PROTECT(ret_utilization = allocVector(INTSXP, num_gpus));
-  PROTECT(ret_mode = allocVector(STRSXP, num_gpus));
+  PROTECT(ret_compute_mode = allocVector(STRSXP, num_gpus));
   
   for (int i=0; i<num_gpus; i++)
   {
@@ -179,6 +195,8 @@ extern "C" SEXP R_smi()
     nvmlPciInfo_t pci;
     CHECK_NVML( nvmlDeviceGetPciInfo (device, &pci) );
     SET_STRING_ELT(ret_busid, i, mkChar(pci.busId));
+    
+    LOGICAL(ret_persistence_mode)[i] = device_get_persistence_mode(device);
     
     LOGICAL(ret_disp)[i] = device_get_display_active(device);
     
@@ -192,20 +210,17 @@ extern "C" SEXP R_smi()
     
     INTEGER(ret_power_max)[i] = device_Get_power_max(device);
     
-    nvmlMemory_t memory;
-    CHECK_NVML( nvmlDeviceGetMemoryInfo(device, &memory) );
-    REAL(ret_memory_used)[i] = (double) memory.used;
-    REAL(ret_memory_total)[i] = (double) memory.total;
+    device_get_memory_info(device, REAL(ret_memory_used)+i, REAL(ret_memory_total)+i);
     
     INTEGER(ret_utilization)[i] = device_get_utilization(device);
     
     device_get_compute_mode(device);
-    SET_STRING_ELT(ret_mode, i, mkChar(str));
+    SET_STRING_ELT(ret_compute_mode, i, mkChar(str));
   }
   
   nvml_shutdown();
   
-  int nret = 13;
+  int nret = 14;
   int n = 0;
   PROTECT(ret = allocVector(VECSXP, nret));
   PROTECT(ret_names = allocVector(STRSXP, nret));
@@ -217,6 +232,8 @@ extern "C" SEXP R_smi()
   SET_STRING_ELT(ret_names, n++, mkChar("name"));
   SET_VECTOR_ELT(ret, n, ret_busid);
   SET_STRING_ELT(ret_names, n++, mkChar("busid"));
+  SET_VECTOR_ELT(ret, n, ret_persistence_mode);
+  SET_STRING_ELT(ret_names, n++, mkChar("persistence_mode"));
   SET_VECTOR_ELT(ret, n, ret_disp);
   SET_STRING_ELT(ret_names, n++, mkChar("disp"));
   SET_VECTOR_ELT(ret, n, ret_speed);
@@ -235,8 +252,8 @@ extern "C" SEXP R_smi()
   SET_STRING_ELT(ret_names, n++, mkChar("memory_total"));
   SET_VECTOR_ELT(ret, n, ret_utilization);
   SET_STRING_ELT(ret_names, n++, mkChar("utilization"));
-  SET_VECTOR_ELT(ret, n, ret_mode);
-  SET_STRING_ELT(ret_names, n++, mkChar("mode"));
+  SET_VECTOR_ELT(ret, n, ret_compute_mode);
+  SET_STRING_ELT(ret_names, n++, mkChar("compute_mode"));
   
   UNPROTECT(nret+2);
   return ret;

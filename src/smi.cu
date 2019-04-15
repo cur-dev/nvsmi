@@ -6,6 +6,9 @@
 char str[STRLEN];
 
 
+// ----------------------------------------------------------------------------
+// nvml interface
+// ----------------------------------------------------------------------------
 #define CHECK_NVML(call) {nvmlReturn_t check = call;check_nvml_ret(check);}
 
 static inline void check_nvml_ret(nvmlReturn_t check)
@@ -24,6 +27,34 @@ static inline void check_nvml_ret(nvmlReturn_t check)
 }
 
 
+
+static inline void nvml_init()
+{
+  CHECK_NVML( nvmlInit() );
+}
+
+static inline void nvml_shutdown()
+{
+  CHECK_NVML( nvmlShutdown() );
+}
+
+
+
+// system functions
+static inline void system_get_driver_version()
+{
+  CHECK_NVML( nvmlSystemGetDriverVersion(str, STRLEN) );
+}
+
+
+
+// device functions
+static inline int device_get_count()
+{
+  unsigned int num_gpus;
+  CHECK_NVML( nvmlDeviceGetCount(&num_gpus) );
+  return (int) num_gpus;
+}
 
 static inline nvmlDevice_t device_get_handle_by_index(int index)
 {
@@ -103,6 +134,9 @@ static inline void device_get_compute_mode(nvmlDevice_t device)
 
 
 
+// ----------------------------------------------------------------------------
+// R interface
+// ----------------------------------------------------------------------------
 extern "C" SEXP R_smi()
 {
   SEXP ret, ret_names;
@@ -112,16 +146,15 @@ extern "C" SEXP R_smi()
     ret_memory_total, ret_utilization, ret_mode;
   
   // init
-  CHECK_NVML( nvmlInit() );
+  nvml_init();
   
   // driver
-  CHECK_NVML( nvmlSystemGetDriverVersion(str, STRLEN) );
+  system_get_driver_version();
   PROTECT(ret_version = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret_version, 0, mkChar(str));
   
   // card statistics
-  unsigned int num_gpus;
-  CHECK_NVML( nvmlDeviceGetCount(&num_gpus) );
+  unsigned int num_gpus = device_get_count();
   
   PROTECT(ret_name = allocVector(STRSXP, num_gpus));
   PROTECT(ret_busid = allocVector(STRSXP, num_gpus));
@@ -170,7 +203,7 @@ extern "C" SEXP R_smi()
     SET_STRING_ELT(ret_mode, i, mkChar(str));
   }
   
-  CHECK_NVML( nvmlShutdown() );
+  nvml_shutdown();
   
   int nret = 13;
   int n = 0;

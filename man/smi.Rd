@@ -2,10 +2,10 @@
 % Please edit documentation in R/smi.r
 \name{smi}
 \alias{smi}
-\title{System Management Interface}
+\title{smi}
 \usage{
 smi()
 }
 \description{
-TODO
+An \code{nvidia-smi} clone.
 }

@@ -1,10 +1,13 @@
-#' System Management Interface
+#' smi
 #' 
-#' TODO
+#' An \code{nvidia-smi} clone.
 #' 
 #' @useDynLib nvsmi R_smi
 #' @export
 smi = function()
 {
-  .Call(R_smi)
+  ret = .Call(R_smi)
+  class(ret) = "nvidia_smi"
+  
+  ret
 }

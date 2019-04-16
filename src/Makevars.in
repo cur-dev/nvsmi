@@ -6,7 +6,7 @@ CUDA_LDFLAGS = @CUDA_LDFLAGS@
 
 PKG_LIBS = $(CUDA_LDFLAGS) -lcudart -lnvidia-ml
 
-CUDA_OBJS = smi.o
+CUDA_OBJS = nvsmi.o
 C_OBJS = nvsmi_native.o
 OBJECTS = $(CUDA_OBJS) $(C_OBJS)
 

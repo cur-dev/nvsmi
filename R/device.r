@@ -89,3 +89,12 @@ device_get_fan_speed = function(device)
   check_device_ptr(device)
   .Call(R_device_get_fan_speed, device)
 }
+
+#' @useDynLib nvsmi R_device_get_temperature
+#' @rdname device
+#' @export
+device_get_temperature = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_temperature, device)
+}

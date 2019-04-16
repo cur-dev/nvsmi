@@ -32,6 +32,7 @@ NULL
 nvsmi_init = function()
 {
   .Call(R_nvsmi_init)
+  invisible()
 }
 
 #' @useDynLib nvsmi R_nvsmi_shutdown
@@ -40,4 +41,5 @@ nvsmi_init = function()
 nvsmi_shutdown = function()
 {
   .Call(R_nvsmi_shutdown)
+  invisible()
 }

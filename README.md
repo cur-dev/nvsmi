@@ -84,3 +84,22 @@ In this example we only have one GPU on the system, but data for all GPUs will b
 ##   ..$ compute_mode    : chr "Default"
 ##  - attr(*, "class")= chr "nvidia_smi"
 ```
+
+
+
+## API
+
+System Queries
+
+```r
+system_get_cuda_driver_version()
+system_get_driver_version()
+system_get_nvml_version()
+system_get_process_name(pid)
+```
+
+High-level interface:
+
+```r
+smi()
+```

@@ -3,7 +3,13 @@
 
 
 #define STRLEN 32
-char str[STRLEN];
+static char str[STRLEN];
+
+static inline void str_reset()
+{
+  for (int i=0; i<STRLEN; i++)
+    str[i] = '\0';
+}
 
 
 // ----------------------------------------------------------------------------
@@ -152,6 +158,7 @@ static inline void device_get_compute_mode(nvmlDevice_t device)
 // ----------------------------------------------------------------------------
 // R interface
 // ----------------------------------------------------------------------------
+
 extern "C" SEXP R_smi()
 {
   SEXP ret, ret_names;
@@ -161,6 +168,7 @@ extern "C" SEXP R_smi()
   SEXP ret_speed, ret_temp, ret_perf, ret_power, ret_power_max, ret_memory_used,
     ret_memory_total, ret_utilization, ret_compute_mode;
   
+  str_reset();
   nvml_init();
   
   system_get_driver_version();
@@ -216,6 +224,7 @@ extern "C" SEXP R_smi()
   }
   
   nvml_shutdown();
+  str_reset();
   
   
   PROTECT(ret = allocVector(VECSXP, 3));

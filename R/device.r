@@ -80,3 +80,12 @@ device_get_display_active = function(device)
   check_device_ptr(device)
   .Call(R_device_get_display_active, device)
 }
+
+#' @useDynLib nvsmi R_device_get_fan_speed
+#' @rdname device
+#' @export
+device_get_fan_speed = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_fan_speed, device)
+}

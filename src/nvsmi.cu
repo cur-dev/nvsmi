@@ -362,6 +362,19 @@ extern "C" SEXP R_device_get_display_active(SEXP device_ptr)
   return ret;
 }
 
+extern "C" SEXP R_device_get_fan_speed(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_fan_speed(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
 
 
 // smi

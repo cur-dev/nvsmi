@@ -113,6 +113,7 @@ device_get_handle_by_index(index)
 device_get_name(device)
 device_get_persistence_mode(device)
 device_get_display_active(device)
+device_get_fan_speed(device)
 ```
 
 High-level interface:

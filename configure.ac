@@ -21,6 +21,11 @@ fi
 AC_PROG_CC_C99
 AX_CHECK_CUDA()
 
+AC_CHECK_LIB(nvidia-ml, nvmlInit, [], [
+  AC_MSG_ERROR([could not find libnvidia-ml])
+])
+
+
 # Report
 echo " "
 echo "****************** Results of nvsmi package configure ******************"

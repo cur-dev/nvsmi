@@ -269,6 +269,6 @@ extern "C" SEXP R_smi()
   SET_VECTOR_ELT(ret_df, n, ret_compute_mode);
   SET_STRING_ELT(ret_df_names, n++, mkChar("compute_mode"));
   
-  UNPROTECT(18);
+  UNPROTECT(19);
   return ret;
 }

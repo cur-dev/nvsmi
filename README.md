@@ -118,3 +118,33 @@ High-level interface:
 ```r
 smi()
 ```
+
+
+
+## Using the Low Level API
+
+* call `nvsmi_init()` before you do anything
+* call `nvsmi_shutdown()` when you're done
+* device pointers are invalid (but will not obviously be so) after calling `nvsmi_shutdown()`
+
+Quick example:
+
+```r
+library(nvsmi)
+nvsmi_init()
+
+system_get_nvml_version()
+## [1] "9.390.116"
+
+device_get_count()
+## [1] 1
+
+d = device_get_handle_by_index(0)
+d
+## A device pointer to GPU 0 of 1 
+
+device_get_name(d)
+## [1] "GeForce GTX 1070 Ti"
+
+nvsmi_shutdown()
+```

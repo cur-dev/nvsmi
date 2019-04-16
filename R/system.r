@@ -51,7 +51,7 @@ system_get_nvml_version = function()
 system_get_process_name = function(pid)
 {
   if (is.null(pid) || is.na(pid) || !is.numeric(pid) || length(pid) != 1 || pid <= 0)
-    stop("'pid' should be a non-negative integer")
+    stop("'pid' should be a positive integer")
   
   pid = as.integer(pid)
   .Call(R_system_get_process_name, pid)

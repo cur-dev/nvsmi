@@ -218,8 +218,8 @@ extern "C" SEXP R_smi()
   nvml_shutdown();
   
   
-  PROTECT(ret = allocVector(VECSXP, 2));
-  PROTECT(ret_names = allocVector(STRSXP, 2));
+  PROTECT(ret = allocVector(VECSXP, 3));
+  PROTECT(ret_names = allocVector(STRSXP, 3));
   setAttrib(ret, R_NamesSymbol, ret_names);
   
   PROTECT(ret_df = allocVector(VECSXP, 13));
@@ -235,8 +235,11 @@ extern "C" SEXP R_smi()
   SET_VECTOR_ELT(ret, 0, ret_version);
   SET_STRING_ELT(ret_names, 0, mkChar("version"));
   
-  SET_VECTOR_ELT(ret, 1, ret_df);
-  SET_STRING_ELT(ret_names, 1, mkChar("gpus"));
+  SET_VECTOR_ELT(ret, 1, R_NilValue);
+  SET_STRING_ELT(ret_names, 1, mkChar("date"));
+  
+  SET_VECTOR_ELT(ret, 2, ret_df);
+  SET_STRING_ELT(ret_names, 2, mkChar("gpus"));
   
   int n = 0;
   SET_VECTOR_ELT(ret_df, n, ret_name);

@@ -34,8 +34,15 @@ device_get_handle_by_index = function(index)
   if (is.null(index) || is.na(index) || !is.numeric(index) || length(index) != 1 || index < 0)
     stop("'index' should be a non-negative integer")
   
-  ret = .Call(R_device_get_handle_by_index)
-  class(ret) = "nvml_device"
+  index = as.integer(index)
+  ngpus = device_get_count()
+  if (!isTRUE(index < ngpus))
+    stop(paste0("need 'index < device_get_count()', have index=", index, " and ngpus=", ngpus))
+  
+  ret = .Call(R_device_get_handle_by_index, index)
+  class(ret) = "nvidia_device"
+  attr(ret, "index") = index
+  attr(ret, "ngpus") = ngpus
   ret
 }
 
@@ -44,7 +51,7 @@ device_get_handle_by_index = function(index)
 #' @export
 device_get_name = function(device)
 {
-  if (!inherits(device, "nvml_device"))
+  if (!inherits(device, "nvidia_device"))
     stop("invalid device pointer")
   
   .Call(R_device_get_name, device)

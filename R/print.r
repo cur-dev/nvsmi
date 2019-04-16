@@ -131,3 +131,19 @@ print.nvidia_smi = function(x, ...)
   else
     stop("'nvsmi_printer' should be one of 'full' or 'minimal'")
 }
+
+
+
+#' print.nvidia_device
+#' Print \code{nvidia_device} objects.
+#' @param x
+#' An \code{nvidia_device} object.
+#' @param ...
+#' Ignored.
+#' @export
+print.nvidia_device = function(x, ...)
+{
+  index = attr(x, "index")
+  ngpus = attr(x, "ngpus")
+  cat(paste("A device pointer to GPU", index, "of", ngpus, "\n"))
+}

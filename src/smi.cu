@@ -24,10 +24,22 @@ static inline void check_nvml_ret(nvmlReturn_t check)
     nvmlShutdown();
     
     if (check == NVML_ERROR_DRIVER_NOT_LOADED)
-      error("nvidia driver is not running\n");
+      error("NVIDIA driver is not running\n");
     else if (check == NVML_ERROR_NO_PERMISSION)
       error("NVML does not have permission to talk to the driver");
+    else if (check == NVML_ERROR_UNINITIALIZED)
+      error("NVML was not successfully initialized");
+    else if (check == NVML_ERROR_INVALID_ARGUMENT)
+      error("invalid argument");
+    else if (check == NVML_ERROR_NOT_FOUND)
+      error("process not found");
+    else if (check == NVML_ERROR_NO_PERMISSION)
+      error("don't have permission to perform the requested operation");
+    else if (check == NVML_ERROR_INSUFFICIENT_SIZE)
+      error("string buffer too small");
     else if (check == NVML_ERROR_UNKNOWN)
+      error("unknown NVML error");
+    else
       error("something went wrong, but I don't know what");
   }
 }

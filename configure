@@ -584,7 +584,6 @@ PACKAGE_URL=
 ac_unique_file="DESCRIPTION"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-R_CPPFLAGS
 NVCC
 CUDA_LDFLAGS
 CUDA_CFLAGS
@@ -595,6 +594,7 @@ CPPFLAGS
 LDFLAGS
 CFLAGS
 CC
+R_CPPFLAGS
 target_alias
 host_alias
 build_alias
@@ -1823,13 +1823,17 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+echo $CC
+
+
+
+
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
   exit 1
 fi
 CC=`"${R_HOME}/bin/R" CMD config CC`
-
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking 'R CMD config --cppflags'" >&5
 $as_echo_n "checking 'R CMD config --cppflags'... " >&6; }
@@ -1846,6 +1850,8 @@ else
 $as_echo "ok" >&6; }
 fi
 
+
+echo $CC
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -2939,13 +2945,13 @@ LDFLAGS=${ax_save_LDFLAGS}
 
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for nvmlInit in -lnvidia-mlx" >&5
-$as_echo_n "checking for nvmlInit in -lnvidia-mlx... " >&6; }
-if ${ac_cv_lib_nvidia_mlx_nvmlInit+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for nvmlInit in -lnvidia-ml" >&5
+$as_echo_n "checking for nvmlInit in -lnvidia-ml... " >&6; }
+if ${ac_cv_lib_nvidia_ml_nvmlInit+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lnvidia-mlx  $LIBS"
+LIBS="-lnvidia-ml  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -2965,22 +2971,22 @@ return nvmlInit ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_nvidia_mlx_nvmlInit=yes
+  ac_cv_lib_nvidia_ml_nvmlInit=yes
 else
-  ac_cv_lib_nvidia_mlx_nvmlInit=no
+  ac_cv_lib_nvidia_ml_nvmlInit=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_nvidia_mlx_nvmlInit" >&5
-$as_echo "$ac_cv_lib_nvidia_mlx_nvmlInit" >&6; }
-if test "x$ac_cv_lib_nvidia_mlx_nvmlInit" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_nvidia_ml_nvmlInit" >&5
+$as_echo "$ac_cv_lib_nvidia_ml_nvmlInit" >&6; }
+if test "x$ac_cv_lib_nvidia_ml_nvmlInit" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBNVIDIA_MLX 1
+#define HAVE_LIBNVIDIA_ML 1
 _ACEOF
 
-  LIBS="-lnvidia-mlx $LIBS"
+  LIBS="-lnvidia-ml $LIBS"
 
 else
 

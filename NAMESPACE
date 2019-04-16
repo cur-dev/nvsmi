@@ -2,4 +2,12 @@
 
 S3method(print,nvidia_smi)
 export(smi)
+export(system_get_cuda_driver_version)
+export(system_get_driver_version)
+export(system_get_nvml_version)
+export(system_get_process_name)
 useDynLib(nvsmi,R_smi)
+useDynLib(nvsmi,R_system_get_cuda_driver_version)
+useDynLib(nvsmi,R_system_get_driver_version)
+useDynLib(nvsmi,R_system_get_nvml_version)
+useDynLib(nvsmi,R_system_get_process_name)

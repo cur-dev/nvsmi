@@ -5,9 +5,20 @@
 #include <R_ext/Rdynload.h>
 #include <stdlib.h>
 
+
+extern SEXP R_system_get_cuda_driver_version();
+extern SEXP R_system_get_driver_version();
+extern SEXP R_system_get_nvml_version();
+extern SEXP R_system_get_process_name(SEXP pid);
+
 extern SEXP R_smi();
 
 static const R_CallMethodDef CallEntries[] = {
+  {"R_system_get_cuda_driver_version", (DL_FUNC) &R_system_get_cuda_driver_version, 0},
+  {"R_system_get_driver_version", (DL_FUNC) &R_system_get_driver_version, 0},
+  {"R_system_get_nvml_version", (DL_FUNC) &R_system_get_nvml_version, 0},
+  {"R_system_get_process_name", (DL_FUNC) &R_system_get_process_name, 1},
+  
   {"R_smi", (DL_FUNC) &R_smi, 0},
   {NULL, NULL, 0}
 };

@@ -1829,7 +1829,22 @@ if test -z "${R_HOME}"; then
   exit 1
 fi
 CC=`"${R_HOME}/bin/R" CMD config CC`
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking 'R CMD config --cppflags'" >&5
+$as_echo_n "checking 'R CMD config --cppflags'... " >&6; }
 R_CPPFLAGS=`"${R_HOME}/bin/R" CMD config --cppflags`
+if test "X${R_CPPFLAGS}" = "X"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: not found!" >&5
+$as_echo "not found!" >&6; }
+  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+as_fn_error $? "R seemingly not build with '--enable-R-shlib=yes'; no way to proceed
+See \`config.log' for more details" "$LINENO" 5; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ok" >&5
+$as_echo "ok" >&6; }
+fi
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'

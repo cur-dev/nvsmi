@@ -336,6 +336,19 @@ extern "C" SEXP R_device_get_name(SEXP device_ptr)
   return ret;
 }
 
+extern "C" SEXP R_device_get_persistence_mode(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_persistence_mode(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
 
 
 // smi

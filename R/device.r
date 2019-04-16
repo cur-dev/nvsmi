@@ -18,6 +18,14 @@ NULL
 
 
 
+check_device_ptr = function(device)
+{
+  if (!inherits(device, "nvidia_device") || !isTRUE(typeof(device) == "externalptr"))
+    stop("invalid device pointer")
+}
+
+
+
 #' @useDynLib nvsmi R_device_get_count
 #' @rdname device
 #' @export
@@ -51,8 +59,15 @@ device_get_handle_by_index = function(index)
 #' @export
 device_get_name = function(device)
 {
-  if (!inherits(device, "nvidia_device"))
-    stop("invalid device pointer")
-  
+  check_device_ptr(device)
   .Call(R_device_get_name, device)
+}
+
+#' @useDynLib nvsmi R_device_get_persistence_mode
+#' @rdname device
+#' @export
+device_get_persistence_mode = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_persistence_mode, device)
 }

@@ -89,6 +89,13 @@ In this example we only have one GPU on the system, but data for all GPUs will b
 
 ## API
 
+Initialization and Shutdown
+
+```r
+nvsmi_init()
+nvsmi_shutdown()
+```
+
 System Queries
 
 ```r

@@ -64,7 +64,7 @@ static inline void nvml_shutdown()
 
 
 
-// system functions
+// system queries
 static inline int system_get_cuda_driver_version()
 {
   int version;
@@ -194,12 +194,25 @@ static inline void device_get_compute_mode(nvmlDevice_t device)
 // R interface
 // ----------------------------------------------------------------------------
 
-// system
+// initialization and cleanup
+extern "C" SEXP R_nvsmi_init()
+{
+  nvml_init();
+  return R_NilValue;
+}
+
+extern "C" SEXP R_nvsmi_shutdown()
+{
+  nvml_shutdown();
+  return R_NilValue;
+}
+
+
+
+// system queries
 extern "C" SEXP R_system_get_cuda_driver_version()
 {
   SEXP ret;
-  
-  nvml_init();
   
   PROTECT(ret = allocVector(INTSXP, 1));
   INTEGER(ret)[0] = system_get_cuda_driver_version();
@@ -213,13 +226,13 @@ extern "C" SEXP R_system_get_driver_version()
   SEXP ret;
   
   str_reset();
-  nvml_init();
   
   system_get_driver_version();
   PROTECT(ret = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret, 0, mkChar(str));
   
   str_reset();
+  
   UNPROTECT(1);
   return ret;
 }
@@ -229,13 +242,13 @@ extern "C" SEXP R_system_get_nvml_version()
   SEXP ret;
   
   str_reset();
-  nvml_init();
   
   system_get_nvml_version();
   PROTECT(ret = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret, 0, mkChar(str));
   
   str_reset();
+  
   UNPROTECT(1);
   return ret;
 }
@@ -245,13 +258,13 @@ extern "C" SEXP R_system_get_process_name(SEXP pid)
   SEXP ret;
   
   str_reset();
-  nvml_init();
   
   system_get_process_name(INTEGER(pid)[0]);
   PROTECT(ret = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret, 0, mkChar(str));
   
   str_reset();
+  
   UNPROTECT(1);
   return ret;
 }

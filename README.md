@@ -105,6 +105,14 @@ system_get_nvml_version()
 system_get_process_name(pid)
 ```
 
+Device Queries
+
+```r
+device_get_count()
+device_get_handle_by_index(index)
+device_get_name(device)
+```
+
 High-level interface:
 
 ```r

@@ -12,6 +12,22 @@ static inline void str_reset()
 }
 
 
+#define newRptr(ptr,Rptr,fin) PROTECT(Rptr = R_MakeExternalPtr(ptr, R_NilValue, R_NilValue));R_RegisterCFinalizerEx(Rptr, fin, TRUE)
+#define getRptr(ptr) R_ExternalPtrAddr(ptr);
+
+static void device_finalize(SEXP ptr)
+{
+  nvmlDevice_t* device;
+  if (NULL == R_ExternalPtrAddr(ptr))
+    return;
+  
+  device = (nvmlDevice_t*) R_ExternalPtrAddr(ptr);
+  free(device);
+  R_ClearExternalPtr(ptr);
+}
+
+
+
 // ----------------------------------------------------------------------------
 // nvml interface
 // ----------------------------------------------------------------------------
@@ -39,6 +55,12 @@ static inline void check_nvml_ret(nvmlReturn_t check)
       error("string buffer too small");
     else if (check == NVML_ERROR_UNKNOWN)
       error("unknown NVML error");
+    else if (check == NVML_ERROR_INSUFFICIENT_POWER)
+      error("device has improperly attached external power cable");
+    else if (check == NVML_ERROR_IRQ_ISSUE)
+      error("NVIDIA kernel detected an interrupt issue with the attached GPUs");
+    else if (check == NVML_ERROR_GPU_IS_LOST)
+      error("GPU is inaccessible");
     else
       error("something went wrong, but I don't know what");
   }
@@ -89,7 +111,7 @@ static inline void system_get_process_name(unsigned int pid)
 
 
 
-// device functions
+// device queries
 static inline int device_get_count()
 {
   unsigned int num_gpus;
@@ -260,6 +282,51 @@ extern "C" SEXP R_system_get_process_name(SEXP pid)
   str_reset();
   
   system_get_process_name(INTEGER(pid)[0]);
+  PROTECT(ret = allocVector(STRSXP, 1));
+  SET_STRING_ELT(ret, 0, mkChar(str));
+  
+  str_reset();
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+
+
+// device queries
+extern "C" SEXP R_device_get_count()
+{
+  SEXP ret;
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_count();
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_handle_by_index(SEXP index)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) malloc(sizeof(*device));
+  *device = device_get_handle_by_index(INTEGER(index)[0]);
+  
+  newRptr(device, ret, device_finalize);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_name(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  str_reset();
+  
+  device_get_name(*device);
   PROTECT(ret = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret, 0, mkChar(str));
   

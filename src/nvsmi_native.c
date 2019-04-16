@@ -14,6 +14,10 @@ extern SEXP R_system_get_driver_version();
 extern SEXP R_system_get_nvml_version();
 extern SEXP R_system_get_process_name(SEXP pid);
 
+extern SEXP R_device_get_count();
+extern SEXP R_device_get_handle_by_index(SEXP index);
+extern SEXP R_device_get_name(SEXP device_ptr);
+
 extern SEXP R_smi();
 
 static const R_CallMethodDef CallEntries[] = {
@@ -24,6 +28,10 @@ static const R_CallMethodDef CallEntries[] = {
   {"R_system_get_driver_version", (DL_FUNC) &R_system_get_driver_version, 0},
   {"R_system_get_nvml_version", (DL_FUNC) &R_system_get_nvml_version, 0},
   {"R_system_get_process_name", (DL_FUNC) &R_system_get_process_name, 1},
+  
+  {"R_device_get_count", (DL_FUNC) &R_device_get_count, 0},
+  {"R_device_get_handle_by_index", (DL_FUNC) &R_device_get_handle_by_index, 1},
+  {"R_device_get_name", (DL_FUNC) &R_device_get_name, 1},
   
   {"R_smi", (DL_FUNC) &R_smi, 0},
   

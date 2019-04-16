@@ -6,6 +6,29 @@
 \usage{
 smi()
 }
+\value{
+A list with 3 elements of class \code{nvidia_smi}:
+\itemize{
+  \item \code{version}: 
+  \item \code{date}: 
+  \item The \code{gpus} dataframe: 
+  \itemize{
+    \item \code{name}: 
+    \item \code{busid}: 
+    \item \code{persistence_mode}: 
+    \item \code{disp}: 
+    \item \code{speed}: 
+    \item \code{temp}: 
+    \item \code{perf}: 
+    \item \code{power}: 
+    \item \code{power_max}: 
+    \item \code{memory_used}: 
+    \item \code{memory_total}: 
+    \item \code{utilization}: 
+    \item \code{compute_mode}: 
+  }
+}
+}
 \description{
 An \code{nvidia-smi} clone.
 }

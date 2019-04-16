@@ -71,3 +71,12 @@ device_get_persistence_mode = function(device)
   check_device_ptr(device)
   .Call(R_device_get_persistence_mode, device)
 }
+
+#' @useDynLib nvsmi R_device_get_display_active
+#' @rdname device
+#' @export
+device_get_display_active = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_display_active, device)
+}

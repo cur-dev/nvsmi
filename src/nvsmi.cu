@@ -349,6 +349,19 @@ extern "C" SEXP R_device_get_persistence_mode(SEXP device_ptr)
   return ret;
 }
 
+extern "C" SEXP R_device_get_display_active(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(LGLSXP, 1));
+  LOGICAL(ret)[0] = device_get_display_active(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
 
 
 // smi

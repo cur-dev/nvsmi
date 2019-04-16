@@ -6,6 +6,7 @@
 \alias{device_get_handle_by_index}
 \alias{device_get_name}
 \alias{device_get_persistence_mode}
+\alias{device_get_display_active}
 \title{NVML Device Queries}
 \usage{
 device_get_count()
@@ -15,6 +16,8 @@ device_get_handle_by_index(index)
 device_get_name(device)
 
 device_get_persistence_mode(device)
+
+device_get_display_active(device)
 }
 \description{
 Wrappers for queries NVML runs against a device.

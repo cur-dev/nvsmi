@@ -37,8 +37,6 @@ static inline void check_nvml_ret(nvmlReturn_t check)
 {
   if (check != NVML_SUCCESS)
   {
-    nvmlShutdown();
-    
     if (check == NVML_ERROR_DRIVER_NOT_LOADED)
       error("NVIDIA driver is not running\n");
     else if (check == NVML_ERROR_NO_PERMISSION)

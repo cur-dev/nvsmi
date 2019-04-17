@@ -388,6 +388,19 @@ extern "C" SEXP R_device_get_temperature(SEXP device_ptr)
   return ret;
 }
 
+extern "C" SEXP R_device_get_performance_state(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_performance_state(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
 
 
 // smi

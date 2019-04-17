@@ -98,3 +98,12 @@ device_get_temperature = function(device)
   check_device_ptr(device)
   .Call(R_device_get_temperature, device)
 }
+
+#' @useDynLib nvsmi R_device_get_performance_state
+#' @rdname device
+#' @export
+device_get_performance_state = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_performance_state, device)
+}

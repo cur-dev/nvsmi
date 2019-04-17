@@ -21,6 +21,7 @@ extern SEXP R_device_get_persistence_mode(SEXP device_ptr);
 extern SEXP R_device_get_display_active(SEXP device_ptr);
 extern SEXP R_device_get_fan_speed(SEXP device_ptr);
 extern SEXP R_device_get_temperature(SEXP device_ptr);
+extern SEXP R_device_get_performance_state(SEXP device_ptr);
 
 extern SEXP R_smi();
 
@@ -40,6 +41,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"R_device_get_display_active", (DL_FUNC) &R_device_get_display_active, 1},
   {"R_device_get_fan_speed", (DL_FUNC) &R_device_get_fan_speed, 1},
   {"R_device_get_temperature", (DL_FUNC) &R_device_get_temperature, 1},
+  {"R_device_get_performance_state", (DL_FUNC) &R_device_get_performance_state, 1},
   
   {"R_smi", (DL_FUNC) &R_smi, 0},
   

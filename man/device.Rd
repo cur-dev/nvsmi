@@ -9,6 +9,7 @@
 \alias{device_get_display_active}
 \alias{device_get_fan_speed}
 \alias{device_get_temperature}
+\alias{device_get_performance_state}
 \title{NVML Device Queries}
 \usage{
 device_get_count()
@@ -24,6 +25,8 @@ device_get_display_active(device)
 device_get_fan_speed(device)
 
 device_get_temperature(device)
+
+device_get_performance_state(device)
 }
 \description{
 Wrappers for queries NVML runs against a device.

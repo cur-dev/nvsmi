@@ -115,6 +115,7 @@ device_get_persistence_mode(device)
 device_get_display_active(device)
 device_get_fan_speed(device)
 device_get_temperature(device)
+device_get_performance_state(device)
 ```
 
 High-level interface:

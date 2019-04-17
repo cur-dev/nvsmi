@@ -15,6 +15,7 @@ extern SEXP R_system_get_nvml_version();
 extern SEXP R_system_get_process_name(SEXP pid);
 
 extern SEXP R_device_get_board_part_number(SEXP device_ptr);
+extern SEXP R_device_get_brand(SEXP device_ptr);
 extern SEXP R_device_get_compute_mode(SEXP device_ptr);
 extern SEXP R_device_get_count();
 extern SEXP R_device_get_display_active(SEXP device_ptr);
@@ -44,6 +45,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"R_system_get_process_name", (DL_FUNC) &R_system_get_process_name, 1},
   
   {"R_device_get_board_part_number", (DL_FUNC) &R_device_get_board_part_number, 1},
+  {"R_device_get_brand", (DL_FUNC) &R_device_get_brand, 1},
   {"R_device_get_compute_mode", (DL_FUNC) &R_device_get_compute_mode, 1},
   {"R_device_get_count", (DL_FUNC) &R_device_get_count, 0},
   {"R_device_get_display_active", (DL_FUNC) &R_device_get_display_active, 1},

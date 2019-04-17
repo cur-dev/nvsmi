@@ -108,6 +108,51 @@ device_get_performance_state = function(device)
   .Call(R_device_get_performance_state, device)
 }
 
+#' @useDynLib nvsmi R_device_get_power_usage
+#' @rdname device
+#' @export
+device_get_power_usage = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_power_usage, device)
+}
+
+#' @useDynLib nvsmi R_device_get_power_max
+#' @rdname device
+#' @export
+device_get_power_max = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_power_max, device)
+}
+
+#' @useDynLib nvsmi R_device_get_memory_info
+#' @rdname device
+#' @export
+device_get_memory_info = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_memory_info, device)
+}
+
+#' @useDynLib nvsmi R_device_get_utilization
+#' @rdname device
+#' @export
+device_get_utilization = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_utilization, device)
+}
+
+#' @useDynLib nvsmi R_device_get_compute_mode
+#' @rdname device
+#' @export
+device_get_compute_mode = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_compute_mode, device)
+}
+
 #' @useDynLib nvsmi R_device_get_index
 #' @rdname device
 #' @export

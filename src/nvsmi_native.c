@@ -22,6 +22,11 @@ extern SEXP R_device_get_display_active(SEXP device_ptr);
 extern SEXP R_device_get_fan_speed(SEXP device_ptr);
 extern SEXP R_device_get_temperature(SEXP device_ptr);
 extern SEXP R_device_get_performance_state(SEXP device_ptr);
+extern SEXP R_device_get_power_usage(SEXP device_ptr);
+extern SEXP R_device_get_power_max(SEXP device_ptr);
+extern SEXP R_device_get_memory_info(SEXP device_ptr);
+extern SEXP R_device_get_utilization(SEXP device_ptr);
+extern SEXP R_device_get_compute_mode(SEXP device_ptr);
 extern SEXP R_device_get_index(SEXP device_ptr);
 extern SEXP R_device_get_uuid(SEXP device_ptr);
 extern SEXP R_device_get_serial(SEXP device_ptr);
@@ -45,6 +50,11 @@ static const R_CallMethodDef CallEntries[] = {
   {"R_device_get_fan_speed", (DL_FUNC) &R_device_get_fan_speed, 1},
   {"R_device_get_temperature", (DL_FUNC) &R_device_get_temperature, 1},
   {"R_device_get_performance_state", (DL_FUNC) &R_device_get_performance_state, 1},
+  {"R_device_get_power_usage", (DL_FUNC) &R_device_get_power_usage, 1},
+  {"R_device_get_power_max", (DL_FUNC) &R_device_get_power_max, 1},
+  {"R_device_get_memory_info", (DL_FUNC) &R_device_get_memory_info, 1},
+  {"R_device_get_utilization", (DL_FUNC) &R_device_get_utilization, 1},
+  {"R_device_get_compute_mode", (DL_FUNC) &R_device_get_compute_mode, 1},
   {"R_device_get_index", (DL_FUNC) &R_device_get_fan_speed, 1},
   {"R_device_get_uuid", (DL_FUNC) &R_device_get_temperature, 1},
   {"R_device_get_serial", (DL_FUNC) &R_device_get_performance_state, 1},

@@ -10,6 +10,11 @@
 \alias{device_get_fan_speed}
 \alias{device_get_temperature}
 \alias{device_get_performance_state}
+\alias{device_get_power_usage}
+\alias{device_get_power_max}
+\alias{device_get_memory_info}
+\alias{device_get_utilization}
+\alias{device_get_compute_mode}
 \alias{device_get_index}
 \alias{device_get_uuid}
 \alias{device_get_serial}
@@ -30,6 +35,16 @@ device_get_fan_speed(device)
 device_get_temperature(device)
 
 device_get_performance_state(device)
+
+device_get_power_usage(device)
+
+device_get_power_max(device)
+
+device_get_memory_info(device)
+
+device_get_utilization(device)
+
+device_get_compute_mode(device)
 
 device_get_index(device)
 

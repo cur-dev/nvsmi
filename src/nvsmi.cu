@@ -176,7 +176,7 @@ static inline int device_get_power_usage(nvmlDevice_t device)
   return (int) power;
 }
 
-static inline int device_Get_power_max(nvmlDevice_t device)
+static inline int device_get_power_max(nvmlDevice_t device)
 {
   unsigned int power_min, power_max;
   CHECK_NVML( nvmlDeviceGetPowerManagementLimitConstraints(device, &power_min, &power_max) );
@@ -420,6 +420,88 @@ extern "C" SEXP R_device_get_performance_state(SEXP device_ptr)
   return ret;
 }
 
+extern "C" SEXP R_device_get_power_usage(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_power_usage(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_power_max(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_power_max(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_memory_info(SEXP device_ptr)
+{
+  SEXP ret, ret_names;
+  SEXP ret_used, ret_total;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret_used = allocVector(REALSXP, 1));
+  PROTECT(ret_total = allocVector(REALSXP, 1));
+  
+  PROTECT(ret = allocVector(VECSXP, 2));
+  PROTECT(ret_names = allocVector(STRSXP, 2));
+  setAttrib(ret, R_NamesSymbol, ret_names);
+  
+  SET_VECTOR_ELT(ret, 0, ret_used);
+  SET_STRING_ELT(ret_names, 0, mkChar("used"));
+  SET_VECTOR_ELT(ret, 1, ret_total);
+  SET_STRING_ELT(ret_names, 1, mkChar("total"));
+  
+  device_get_memory_info(*device, REAL(ret_used), REAL(ret_total));
+  
+  UNPROTECT(4);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_utilization(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_utilization(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  str_reset();
+  
+  device_get_compute_mode(*device);
+  PROTECT(ret = allocVector(STRSXP, 1));
+  SET_STRING_ELT(ret, 0, mkChar(str));
+  
+  str_reset();
+  
+  UNPROTECT(1);
+  return ret;
+}
+
 extern "C" SEXP R_device_get_index(SEXP device_ptr)
 {
   SEXP ret;
@@ -526,7 +608,7 @@ extern "C" SEXP R_smi()
     
     INTEGER(ret_power)[i] = device_get_power_usage(device);
     
-    INTEGER(ret_power_max)[i] = device_Get_power_max(device);
+    INTEGER(ret_power_max)[i] = device_get_power_max(device);
     
     device_get_memory_info(device, REAL(ret_memory_used)+i, REAL(ret_memory_total)+i);
     

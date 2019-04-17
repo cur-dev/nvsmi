@@ -114,6 +114,11 @@ static inline void system_get_process_name(unsigned int pid)
 
 
 // device queries
+static inline void device_get_board_part_number(nvmlDevice_t device)
+{
+  CHECK_NVML( nvmlDeviceGetBoardPartNumber(device, str, STRLEN) );
+}
+
 static inline void device_get_compute_mode(nvmlDevice_t device)
 {
   nvmlComputeMode_t mode;
@@ -313,10 +318,26 @@ extern "C" SEXP R_system_get_process_name(SEXP pid)
 
 
 // device queries
+extern "C" SEXP R_device_get_board_part_number(SEXP device_ptr)
+{
+  SEXP ret;
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  str_reset();
+  
+  device_get_board_part_number(*device);
+  PROTECT(ret = allocVector(STRSXP, 1));
+  SET_STRING_ELT(ret, 0, mkChar(str));
+  
+  str_reset();
+  
+  UNPROTECT(1);
+  return ret;
+}
+
 extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
 {
   SEXP ret;
-  
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
   
   str_reset();

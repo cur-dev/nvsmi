@@ -108,6 +108,7 @@ system_get_process_name(pid)
 Device Queries
 
 ```r
+device_get_board_part_number(device)
 device_get_compute_mode(device)
 device_get_count()
 device_get_display_active(device)

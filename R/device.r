@@ -26,6 +26,15 @@ check_device_ptr = function(device)
 
 
 
+#' @useDynLib nvsmi R_device_get_board_part_number
+#' @rdname device
+#' @export
+device_get_board_part_number = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_board_part_number, device)
+}
+
 #' @useDynLib nvsmi R_device_get_compute_mode
 #' @rdname device
 #' @export

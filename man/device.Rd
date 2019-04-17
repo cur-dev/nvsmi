@@ -2,6 +2,7 @@
 % Please edit documentation in R/device.r
 \name{device}
 \alias{device}
+\alias{device_get_board_part_number}
 \alias{device_get_compute_mode}
 \alias{device_get_count}
 \alias{device_get_display_active}
@@ -20,6 +21,8 @@
 \alias{device_get_uuid}
 \title{NVML Device Queries}
 \usage{
+device_get_board_part_number(device)
+
 device_get_compute_mode(device)
 
 device_get_count()

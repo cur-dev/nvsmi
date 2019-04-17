@@ -184,6 +184,11 @@ static inline int device_get_count()
   return (int) num_gpus;
 }
 
+static inline void device_get_cuda_compute_capability(nvmlDevice_t device, int *major, int *minor)
+{
+  CHECK_NVML( nvmlDeviceGetCudaComputeCapability(device, major, minor) );
+}
+
 static inline int device_get_display_active(nvmlDevice_t device)
 {
   nvmlEnableState_t disp;
@@ -419,6 +424,18 @@ extern "C" SEXP R_device_get_count()
   
   PROTECT(ret = allocVector(INTSXP, 1));
   INTEGER(ret)[0] = device_get_count();
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_cuda_compute_capability(SEXP device_ptr)
+{
+  SEXP ret;
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 2));
+  device_get_cuda_compute_capability(*device, INTEGER(ret), INTEGER(ret)+1);
   
   UNPROTECT(1);
   return ret;

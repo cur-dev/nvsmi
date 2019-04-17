@@ -6,6 +6,7 @@
 \alias{device_get_brand}
 \alias{device_get_compute_mode}
 \alias{device_get_count}
+\alias{device_get_cuda_compute_capability}
 \alias{device_get_display_active}
 \alias{device_get_fan_speed}
 \alias{device_get_handle_by_index}
@@ -29,6 +30,8 @@ device_get_brand(device)
 device_get_compute_mode(device)
 
 device_get_count()
+
+device_get_cuda_compute_capability(device)
 
 device_get_display_active(device)
 

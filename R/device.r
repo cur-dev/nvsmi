@@ -61,6 +61,14 @@ device_get_count = function()
   .Call(R_device_get_count)
 }
 
+#' @useDynLib nvsmi R_device_get_cuda_compute_capability
+#' @rdname device
+#' @export
+device_get_cuda_compute_capability = function(device)
+{
+  .Call(R_device_get_cuda_compute_capability, device)
+}
+
 #' @useDynLib nvsmi R_device_get_display_active
 #' @rdname device
 #' @export

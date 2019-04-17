@@ -2,7 +2,7 @@
 #include <Rinternals.h>
 
 
-#define STRLEN 32
+#define STRLEN 64
 static char str[STRLEN];
 
 static inline void str_reset()

@@ -20,6 +20,7 @@ extern SEXP R_device_get_compute_mode(SEXP device_ptr);
 extern SEXP R_device_get_count();
 extern SEXP R_device_get_cuda_compute_capability(SEXP device_ptr);
 extern SEXP R_device_get_curr_pcie_link_generation();
+extern SEXP R_device_get_curr_pcie_link_width(SEXP device_ptr);
 extern SEXP R_device_get_display_active(SEXP device_ptr);
 extern SEXP R_device_get_fan_speed(SEXP device_ptr);
 extern SEXP R_device_get_handle_by_index(SEXP index);
@@ -52,6 +53,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"R_device_get_count", (DL_FUNC) &R_device_get_count, 0},
   {"R_device_get_cuda_compute_capability", (DL_FUNC) &R_device_get_cuda_compute_capability, 1},
   {"R_device_get_curr_pcie_link_generation", (DL_FUNC) &R_device_get_curr_pcie_link_generation, 1},
+  {"R_device_get_curr_pcie_link_width", (DL_FUNC) &R_device_get_curr_pcie_link_width, 1},
   {"R_device_get_display_active", (DL_FUNC) &R_device_get_display_active, 1},
   {"R_device_get_fan_speed", (DL_FUNC) &R_device_get_fan_speed, 1},
   {"R_device_get_handle_by_index", (DL_FUNC) &R_device_get_handle_by_index, 1},

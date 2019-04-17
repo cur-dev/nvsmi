@@ -196,6 +196,13 @@ static inline int device_get_curr_pcie_link_generation(nvmlDevice_t device)
   return (int) currLinkGen;
 }
 
+static inline int device_get_curr_pcie_link_width(nvmlDevice_t device)
+{
+  unsigned int currLinkWidth;
+  CHECK_NVML( nvmlDeviceGetCurrPcieLinkWidth(device, &currLinkWidth) );
+  return (int) currLinkWidth;
+}
+
 static inline int device_get_display_active(nvmlDevice_t device)
 {
   nvmlEnableState_t disp;
@@ -455,6 +462,18 @@ extern "C" SEXP R_device_get_curr_pcie_link_generation(SEXP device_ptr)
   
   PROTECT(ret = allocVector(INTSXP, 1));
   INTEGER(ret)[0] = device_get_curr_pcie_link_generation(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_curr_pcie_link_width(SEXP device_ptr)
+{
+  SEXP ret;
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_curr_pcie_link_width(*device);
   
   UNPROTECT(1);
   return ret;

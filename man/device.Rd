@@ -8,6 +8,7 @@
 \alias{device_get_count}
 \alias{device_get_cuda_compute_capability}
 \alias{device_get_curr_pcie_link_generation}
+\alias{device_get_curr_pcie_link_width}
 \alias{device_get_display_active}
 \alias{device_get_fan_speed}
 \alias{device_get_handle_by_index}
@@ -35,6 +36,8 @@ device_get_count()
 device_get_cuda_compute_capability(device)
 
 device_get_curr_pcie_link_generation(device)
+
+device_get_curr_pcie_link_width(device)
 
 device_get_display_active(device)
 

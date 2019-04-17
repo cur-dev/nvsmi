@@ -107,3 +107,30 @@ device_get_performance_state = function(device)
   check_device_ptr(device)
   .Call(R_device_get_performance_state, device)
 }
+
+#' @useDynLib nvsmi R_device_get_index
+#' @rdname device
+#' @export
+device_get_index = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_index, device)
+}
+
+#' @useDynLib nvsmi R_device_get_uuid
+#' @rdname device
+#' @export
+device_get_uuid = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_uuid, device)
+}
+
+#' @useDynLib nvsmi R_device_get_serial
+#' @rdname device
+#' @export
+device_get_serial = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_serial, device)
+}

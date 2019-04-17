@@ -38,7 +38,7 @@ static inline void check_nvml_ret(nvmlReturn_t check)
   if (check != NVML_SUCCESS)
   {
     if (check == NVML_ERROR_DRIVER_NOT_LOADED)
-      error("NVIDIA driver is not running\n");
+      error("NVIDIA driver is not running");
     else if (check == NVML_ERROR_NO_PERMISSION)
       error("NVML does not have permission to talk to the driver");
     else if (check == NVML_ERROR_UNINITIALIZED)
@@ -59,6 +59,10 @@ static inline void check_nvml_ret(nvmlReturn_t check)
       error("NVIDIA kernel detected an interrupt issue with the attached GPUs");
     else if (check == NVML_ERROR_GPU_IS_LOST)
       error("GPU is inaccessible");
+    else if (check == NVML_ERROR_NOT_SUPPORTED)
+      error("device does not support requested feature");
+    else if (check == NVML_ERROR_INSUFFICIENT_SIZE)
+      error("internal string buffer too small");
     else
       error("something went wrong, but I don't know what");
   }
@@ -206,6 +210,23 @@ static inline void device_get_compute_mode(nvmlDevice_t device)
     strcpy(str, "Prohibited");
   else if (mode == NVML_COMPUTEMODE_EXCLUSIVE_PROCESS)
     strcpy(str, "Exclusive Process");
+}
+
+static inline int device_get_index(nvmlDevice_t device)
+{
+  unsigned int index;
+  CHECK_NVML( nvmlDeviceGetIndex(device, &index) );
+  return (int) index;
+}
+
+static inline void device_get_uuid(nvmlDevice_t device)
+{
+  CHECK_NVML( nvmlDeviceGetUUID(device, str, STRLEN) );
+}
+
+static inline void device_get_serial(nvmlDevice_t device)
+{
+  CHECK_NVML( nvmlDeviceGetSerial(device, str, STRLEN) );
 }
 
 
@@ -394,6 +415,55 @@ extern "C" SEXP R_device_get_performance_state(SEXP device_ptr)
   
   PROTECT(ret = allocVector(INTSXP, 1));
   INTEGER(ret)[0] = device_get_performance_state(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_index(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_index(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_uuid(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  str_reset();
+  
+  device_get_uuid(*device);
+  PROTECT(ret = allocVector(STRSXP, 1));
+  SET_STRING_ELT(ret, 0, mkChar(str));
+  
+  str_reset();
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_serial(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  str_reset();
+  
+  device_get_serial(*device);
+  PROTECT(ret = allocVector(STRSXP, 1));
+  SET_STRING_ELT(ret, 0, mkChar(str));
+  
+  str_reset();
   
   UNPROTECT(1);
   return ret;

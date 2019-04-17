@@ -116,6 +116,9 @@ device_get_display_active(device)
 device_get_fan_speed(device)
 device_get_temperature(device)
 device_get_performance_state(device)
+device_get_index(device)
+device_get_uuid(device)
+device_get_serial(device)
 ```
 
 High-level interface:

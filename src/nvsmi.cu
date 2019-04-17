@@ -37,32 +37,52 @@ static inline void check_nvml_ret(nvmlReturn_t check)
 {
   if (check != NVML_SUCCESS)
   {
-    if (check == NVML_ERROR_DRIVER_NOT_LOADED)
-      error("NVIDIA driver is not running");
-    else if (check == NVML_ERROR_NO_PERMISSION)
-      error("NVML does not have permission to talk to the driver");
-    else if (check == NVML_ERROR_UNINITIALIZED)
-      error("NVML was not successfully initialized");
+    if (check == NVML_ERROR_UNINITIALIZED)
+      error("NVML was not successfully initialized");  
     else if (check == NVML_ERROR_INVALID_ARGUMENT)
       error("invalid argument");
-    else if (check == NVML_ERROR_NOT_FOUND)
-      error("process not found");
-    else if (check == NVML_ERROR_NO_PERMISSION)
-      error("don't have permission to perform the requested operation");
-    else if (check == NVML_ERROR_INSUFFICIENT_SIZE)
-      error("string buffer too small");
-    else if (check == NVML_ERROR_UNKNOWN)
-      error("unknown NVML error");
-    else if (check == NVML_ERROR_INSUFFICIENT_POWER)
-      error("device has improperly attached external power cable");
-    else if (check == NVML_ERROR_IRQ_ISSUE)
-      error("NVIDIA kernel detected an interrupt issue with the attached GPUs");
-    else if (check == NVML_ERROR_GPU_IS_LOST)
-      error("GPU is inaccessible");
     else if (check == NVML_ERROR_NOT_SUPPORTED)
       error("device does not support requested feature");
+    else if (check == NVML_ERROR_NO_PERMISSION)
+      error("NVML does not have permission to talk to the driver");
+    // else if (check == NVML_ERROR_ALREADY_INITIALIZED) // deprecated
+    //   error("already initialized")
+    else if (check == NVML_ERROR_NOT_FOUND)
+      error("process not found");
     else if (check == NVML_ERROR_INSUFFICIENT_SIZE)
       error("internal string buffer too small");
+    else if (check == NVML_ERROR_INSUFFICIENT_POWER)
+      error("device has improperly attached external power cable");
+    else if (check == NVML_ERROR_DRIVER_NOT_LOADED)
+      error("NVIDIA driver is not running");
+    else if (check == NVML_ERROR_TIMEOUT)
+      error("provided timeout has passed");
+    else if (check == NVML_ERROR_IRQ_ISSUE)
+      error("NVIDIA kernel detected an interrupt issue with the attached GPUs");
+    else if (check == NVML_ERROR_LIBRARY_NOT_FOUND)
+      error("NVML shared library could not be loaded");
+    else if (check == NVML_ERROR_FUNCTION_NOT_FOUND)
+      error("local NVML version does not support requested function");
+    else if (check == NVML_ERROR_CORRUPTED_INFOROM)
+      error("infoROM is corrupted");
+    else if (check == NVML_ERROR_GPU_IS_LOST)
+      error("GPU is inaccessible");
+    else if (check == NVML_ERROR_RESET_REQUIRED)
+      error("GPU needs to be reset before it can be used again");
+    else if (check == NVML_ERROR_OPERATING_SYSTEM)
+      error("GPU control device was blocked by the OS");
+    else if (check == NVML_ERROR_LIB_RM_VERSION_MISMATCH)
+      error("driver/library version mismatch");
+    else if (check == NVML_ERROR_IN_USE)
+      error("GPU currently in use");
+    else if (check == NVML_ERROR_MEMORY)
+      error("insufficient memory");
+    else if (check == NVML_ERROR_MEMORY)
+      error("no data");
+    else if (check == NVML_ERROR_VGPU_ECC_NOT_SUPPORTED)
+      error("operation is not available because ECC is enabled");
+    else if (check == NVML_ERROR_UNKNOWN)
+      error("unknown NVML error");
     else
       error("something went wrong, but I don't know what");
   }

@@ -2,55 +2,55 @@
 % Please edit documentation in R/device.r
 \name{device}
 \alias{device}
+\alias{device_get_compute_mode}
 \alias{device_get_count}
-\alias{device_get_handle_by_index}
-\alias{device_get_name}
-\alias{device_get_persistence_mode}
 \alias{device_get_display_active}
 \alias{device_get_fan_speed}
-\alias{device_get_temperature}
-\alias{device_get_performance_state}
-\alias{device_get_power_usage}
-\alias{device_get_power_max}
-\alias{device_get_memory_info}
-\alias{device_get_utilization}
-\alias{device_get_compute_mode}
+\alias{device_get_handle_by_index}
 \alias{device_get_index}
-\alias{device_get_uuid}
+\alias{device_get_memory_info}
+\alias{device_get_name}
+\alias{device_get_performance_state}
+\alias{device_get_persistence_mode}
+\alias{device_get_power_max}
+\alias{device_get_power_usage}
 \alias{device_get_serial}
+\alias{device_get_temperature}
+\alias{device_get_utilization}
+\alias{device_get_uuid}
 \title{NVML Device Queries}
 \usage{
+device_get_compute_mode(device)
+
 device_get_count()
-
-device_get_handle_by_index(index)
-
-device_get_name(device)
-
-device_get_persistence_mode(device)
 
 device_get_display_active(device)
 
 device_get_fan_speed(device)
 
-device_get_temperature(device)
-
-device_get_performance_state(device)
-
-device_get_power_usage(device)
-
-device_get_power_max(device)
-
-device_get_memory_info(device)
-
-device_get_utilization(device)
-
-device_get_compute_mode(device)
+device_get_handle_by_index(index)
 
 device_get_index(device)
 
-device_get_uuid(device)
+device_get_memory_info(device)
+
+device_get_name(device)
+
+device_get_performance_state(device)
+
+device_get_persistence_mode(device)
+
+device_get_power_max(device)
+
+device_get_power_usage(device)
 
 device_get_serial(device)
+
+device_get_temperature(device)
+
+device_get_utilization(device)
+
+device_get_uuid(device)
 }
 \description{
 Wrappers for queries NVML runs against a device.

@@ -114,30 +114,25 @@ static inline void system_get_process_name(unsigned int pid)
 
 
 // device queries
+static inline void device_get_compute_mode(nvmlDevice_t device)
+{
+  nvmlComputeMode_t mode;
+  CHECK_NVML( nvmlDeviceGetComputeMode(device, &mode) );
+  if (mode == NVML_COMPUTEMODE_DEFAULT)
+    strcpy(str, "Default");
+  else if (mode == NVML_COMPUTEMODE_EXCLUSIVE_THREAD)
+    strcpy(str, "Exclusive Thread");
+  else if (mode == NVML_COMPUTEMODE_PROHIBITED)
+    strcpy(str, "Prohibited");
+  else if (mode == NVML_COMPUTEMODE_EXCLUSIVE_PROCESS)
+    strcpy(str, "Exclusive Process");
+}
+
 static inline int device_get_count()
 {
   unsigned int num_gpus;
   CHECK_NVML( nvmlDeviceGetCount(&num_gpus) );
   return (int) num_gpus;
-}
-
-static inline nvmlDevice_t device_get_handle_by_index(int index)
-{
-  nvmlDevice_t device;
-  CHECK_NVML( nvmlDeviceGetHandleByIndex(index, &device) );
-  return device;
-}
-
-static inline void device_get_name(nvmlDevice_t device)
-{
-  CHECK_NVML( nvmlDeviceGetName(device, str, STRLEN) );
-}
-
-static inline int device_get_persistence_mode(nvmlDevice_t device)
-{
-  nvmlEnableState_t mode;
-  CHECK_NVML( nvmlDeviceGetPersistenceMode(device, &mode) );
-  return (int) mode;
 }
 
 static inline int device_get_display_active(nvmlDevice_t device)
@@ -154,33 +149,18 @@ static inline int device_get_fan_speed(nvmlDevice_t device)
   return (int) speed;
 }
 
-static inline int device_get_temperature(nvmlDevice_t device)
+static inline nvmlDevice_t device_get_handle_by_index(int index)
 {
-  nvmlTemperatureSensors_t sensor = NVML_TEMPERATURE_GPU;
-  unsigned int temp;
-  CHECK_NVML( nvmlDeviceGetTemperature(device, sensor, &temp) );
-  return (int) temp;
+  nvmlDevice_t device;
+  CHECK_NVML( nvmlDeviceGetHandleByIndex(index, &device) );
+  return device;
 }
 
-static inline int device_get_performance_state(nvmlDevice_t device)
+static inline int device_get_index(nvmlDevice_t device)
 {
-  nvmlPstates_t pState;
-  CHECK_NVML( nvmlDeviceGetPerformanceState(device, &pState) );
-  return (int) pState;
-}
-
-static inline int device_get_power_usage(nvmlDevice_t device)
-{
-  unsigned int power;
-  CHECK_NVML( nvmlDeviceGetPowerUsage(device, &power) );
-  return (int) power;
-}
-
-static inline int device_get_power_max(nvmlDevice_t device)
-{
-  unsigned int power_min, power_max;
-  CHECK_NVML( nvmlDeviceGetPowerManagementLimitConstraints(device, &power_min, &power_max) );
-  return (int) power_max;
+  unsigned int index;
+  CHECK_NVML( nvmlDeviceGetIndex(device, &index) );
+  return (int) index;
 }
 
 static inline void device_get_memory_info(nvmlDevice_t device, double *memory_used, double *memory_total)
@@ -191,6 +171,52 @@ static inline void device_get_memory_info(nvmlDevice_t device, double *memory_us
   *memory_total = (double) memory.total;
 }
 
+static inline void device_get_name(nvmlDevice_t device)
+{
+  CHECK_NVML( nvmlDeviceGetName(device, str, STRLEN) );
+}
+
+static inline int device_get_performance_state(nvmlDevice_t device)
+{
+  nvmlPstates_t pState;
+  CHECK_NVML( nvmlDeviceGetPerformanceState(device, &pState) );
+  return (int) pState;
+}
+
+static inline int device_get_persistence_mode(nvmlDevice_t device)
+{
+  nvmlEnableState_t mode;
+  CHECK_NVML( nvmlDeviceGetPersistenceMode(device, &mode) );
+  return (int) mode;
+}
+
+static inline int device_get_power_max(nvmlDevice_t device)
+{
+  unsigned int power_min, power_max;
+  CHECK_NVML( nvmlDeviceGetPowerManagementLimitConstraints(device, &power_min, &power_max) );
+  return (int) power_max;
+}
+
+static inline int device_get_power_usage(nvmlDevice_t device)
+{
+  unsigned int power;
+  CHECK_NVML( nvmlDeviceGetPowerUsage(device, &power) );
+  return (int) power;
+}
+
+static inline void device_get_serial(nvmlDevice_t device)
+{
+  CHECK_NVML( nvmlDeviceGetSerial(device, str, STRLEN) );
+}
+
+static inline int device_get_temperature(nvmlDevice_t device)
+{
+  nvmlTemperatureSensors_t sensor = NVML_TEMPERATURE_GPU;
+  unsigned int temp;
+  CHECK_NVML( nvmlDeviceGetTemperature(device, sensor, &temp) );
+  return (int) temp;
+}
+
 static inline int device_get_utilization(nvmlDevice_t device)
 {
   nvmlUtilization_t utilization;
@@ -198,35 +224,9 @@ static inline int device_get_utilization(nvmlDevice_t device)
   return (int) utilization.gpu;
 }
 
-static inline void device_get_compute_mode(nvmlDevice_t device)
-{
-  nvmlComputeMode_t mode;
-  CHECK_NVML( nvmlDeviceGetComputeMode(device, &mode) );
-  if (mode == NVML_COMPUTEMODE_DEFAULT)
-    strcpy(str, "Default");
-  else if (mode == NVML_COMPUTEMODE_EXCLUSIVE_THREAD)
-    strcpy(str, "Exclusive Thread");
-  else if (mode == NVML_COMPUTEMODE_PROHIBITED)
-    strcpy(str, "Prohibited");
-  else if (mode == NVML_COMPUTEMODE_EXCLUSIVE_PROCESS)
-    strcpy(str, "Exclusive Process");
-}
-
-static inline int device_get_index(nvmlDevice_t device)
-{
-  unsigned int index;
-  CHECK_NVML( nvmlDeviceGetIndex(device, &index) );
-  return (int) index;
-}
-
 static inline void device_get_uuid(nvmlDevice_t device)
 {
   CHECK_NVML( nvmlDeviceGetUUID(device, str, STRLEN) );
-}
-
-static inline void device_get_serial(nvmlDevice_t device)
-{
-  CHECK_NVML( nvmlDeviceGetSerial(device, str, STRLEN) );
 }
 
 
@@ -313,31 +313,7 @@ extern "C" SEXP R_system_get_process_name(SEXP pid)
 
 
 // device queries
-extern "C" SEXP R_device_get_count()
-{
-  SEXP ret;
-  
-  PROTECT(ret = allocVector(INTSXP, 1));
-  INTEGER(ret)[0] = device_get_count();
-  
-  UNPROTECT(1);
-  return ret;
-}
-
-extern "C" SEXP R_device_get_handle_by_index(SEXP index)
-{
-  SEXP ret;
-  
-  nvmlDevice_t *device = (nvmlDevice_t*) malloc(sizeof(*device));
-  *device = device_get_handle_by_index(INTEGER(index)[0]);
-  
-  newRptr(device, ret, device_finalize);
-  
-  UNPROTECT(1);
-  return ret;
-}
-
-extern "C" SEXP R_device_get_name(SEXP device_ptr)
+extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
 {
   SEXP ret;
   
@@ -345,7 +321,7 @@ extern "C" SEXP R_device_get_name(SEXP device_ptr)
   
   str_reset();
   
-  device_get_name(*device);
+  device_get_compute_mode(*device);
   PROTECT(ret = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret, 0, mkChar(str));
   
@@ -355,14 +331,12 @@ extern "C" SEXP R_device_get_name(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_persistence_mode(SEXP device_ptr)
+extern "C" SEXP R_device_get_count()
 {
   SEXP ret;
   
-  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
-  
   PROTECT(ret = allocVector(INTSXP, 1));
-  INTEGER(ret)[0] = device_get_persistence_mode(*device);
+  INTEGER(ret)[0] = device_get_count();
   
   UNPROTECT(1);
   return ret;
@@ -394,53 +368,27 @@ extern "C" SEXP R_device_get_fan_speed(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_temperature(SEXP device_ptr)
+extern "C" SEXP R_device_get_handle_by_index(SEXP index)
 {
   SEXP ret;
   
-  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  nvmlDevice_t *device = (nvmlDevice_t*) malloc(sizeof(*device));
+  *device = device_get_handle_by_index(INTEGER(index)[0]);
   
-  PROTECT(ret = allocVector(INTSXP, 1));
-  INTEGER(ret)[0] = device_get_temperature(*device);
+  newRptr(device, ret, device_finalize);
   
   UNPROTECT(1);
   return ret;
 }
 
-extern "C" SEXP R_device_get_performance_state(SEXP device_ptr)
+extern "C" SEXP R_device_get_index(SEXP device_ptr)
 {
   SEXP ret;
   
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
   
   PROTECT(ret = allocVector(INTSXP, 1));
-  INTEGER(ret)[0] = device_get_performance_state(*device);
-  
-  UNPROTECT(1);
-  return ret;
-}
-
-extern "C" SEXP R_device_get_power_usage(SEXP device_ptr)
-{
-  SEXP ret;
-  
-  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
-  
-  PROTECT(ret = allocVector(INTSXP, 1));
-  INTEGER(ret)[0] = device_get_power_usage(*device);
-  
-  UNPROTECT(1);
-  return ret;
-}
-
-extern "C" SEXP R_device_get_power_max(SEXP device_ptr)
-{
-  SEXP ret;
-  
-  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
-  
-  PROTECT(ret = allocVector(INTSXP, 1));
-  INTEGER(ret)[0] = device_get_power_max(*device);
+  INTEGER(ret)[0] = device_get_index(*device);
   
   UNPROTECT(1);
   return ret;
@@ -471,20 +419,7 @@ extern "C" SEXP R_device_get_memory_info(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_utilization(SEXP device_ptr)
-{
-  SEXP ret;
-  
-  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
-  
-  PROTECT(ret = allocVector(INTSXP, 1));
-  INTEGER(ret)[0] = device_get_utilization(*device);
-  
-  UNPROTECT(1);
-  return ret;
-}
-
-extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
+extern "C" SEXP R_device_get_name(SEXP device_ptr)
 {
   SEXP ret;
   
@@ -492,7 +427,7 @@ extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
   
   str_reset();
   
-  device_get_compute_mode(*device);
+  device_get_name(*device);
   PROTECT(ret = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret, 0, mkChar(str));
   
@@ -502,32 +437,53 @@ extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_index(SEXP device_ptr)
+extern "C" SEXP R_device_get_performance_state(SEXP device_ptr)
 {
   SEXP ret;
   
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
   
   PROTECT(ret = allocVector(INTSXP, 1));
-  INTEGER(ret)[0] = device_get_index(*device);
+  INTEGER(ret)[0] = device_get_performance_state(*device);
   
   UNPROTECT(1);
   return ret;
 }
 
-extern "C" SEXP R_device_get_uuid(SEXP device_ptr)
+extern "C" SEXP R_device_get_persistence_mode(SEXP device_ptr)
 {
   SEXP ret;
   
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
   
-  str_reset();
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_persistence_mode(*device);
   
-  device_get_uuid(*device);
-  PROTECT(ret = allocVector(STRSXP, 1));
-  SET_STRING_ELT(ret, 0, mkChar(str));
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_power_max(SEXP device_ptr)
+{
+  SEXP ret;
   
-  str_reset();
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_power_max(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_power_usage(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_power_usage(*device);
   
   UNPROTECT(1);
   return ret;
@@ -542,6 +498,50 @@ extern "C" SEXP R_device_get_serial(SEXP device_ptr)
   str_reset();
   
   device_get_serial(*device);
+  PROTECT(ret = allocVector(STRSXP, 1));
+  SET_STRING_ELT(ret, 0, mkChar(str));
+  
+  str_reset();
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_temperature(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_temperature(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_utilization(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  PROTECT(ret = allocVector(INTSXP, 1));
+  INTEGER(ret)[0] = device_get_utilization(*device);
+  
+  UNPROTECT(1);
+  return ret;
+}
+
+extern "C" SEXP R_device_get_uuid(SEXP device_ptr)
+{
+  SEXP ret;
+  
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  str_reset();
+  
+  device_get_uuid(*device);
   PROTECT(ret = allocVector(STRSXP, 1));
   SET_STRING_ELT(ret, 0, mkChar(str));
   

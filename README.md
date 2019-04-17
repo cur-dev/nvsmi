@@ -108,22 +108,22 @@ system_get_process_name(pid)
 Device Queries
 
 ```r
+device_get_compute_mode(device)
 device_get_count()
-device_get_handle_by_index(index)
-device_get_name(device)
-device_get_persistence_mode(device)
 device_get_display_active(device)
 device_get_fan_speed(device)
-device_get_temperature(device)
-device_get_performance_state(device)
-device_get_power_usage(device)
-device_get_power_max(device)
-device_get_memory_info(device)
-device_get_utilization(device)
-device_get_compute_mode(device)
+device_get_handle_by_index(index)
 device_get_index(device)
-device_get_uuid(device)
+device_get_memory_info(device)
+device_get_name(device)
+device_get_performance_state(device)
+device_get_persistence_mode(device)
+device_get_power_max(device)
+device_get_power_usage(device)
 device_get_serial(device)
+device_get_temperature(device)
+device_get_utilization(device)
+device_get_uuid(device)
 ```
 
 High-level interface:

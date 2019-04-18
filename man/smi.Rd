@@ -4,10 +4,10 @@
 \alias{smi}
 \title{smi}
 \usage{
-smi()
+smi(processes = TRUE)
 }
 \value{
-A list with 3 elements of class \code{nvidia_smi}:
+A list with 3 (4 if \code{processes=TRUE} elements of class \code{nvidia_smi}:
 \itemize{
   \item \code{version}: 
   \item \code{date}: 
@@ -28,7 +28,12 @@ A list with 3 elements of class \code{nvidia_smi}:
     \item \code{compute_mode}: 
   }
 }
+If \code{processes=TRUE} then it will also include the return of
+\code{gpu_processes()}.
 }
 \description{
 An \code{nvidia-smi} clone.
+}
+\seealso{
+\code{\link{gpu_processes}}
 }

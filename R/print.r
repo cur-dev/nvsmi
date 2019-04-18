@@ -25,6 +25,25 @@ onoff_str = function(s)
 
 
 
+print_processes = function(p)
+{
+  cat("+-----------------------------------------------------------------------------+\n")
+  cat("| Processes:                                                       GPU Memory |\n")
+  cat("|  GPU       PID   Type   Process name                             Usage      |\n")
+  cat("|=============================================================================|\n")
+  
+  for (i in 1:nrow(p))
+  {
+    pname = dot_str(p[i, 4], 42)
+    mem = p[i, 5]/1024/1024
+    cat(sprintf("|%5d %9d %6s   %-42s %5.0fMiB |\n", p[i, 1], p[i, 2], p[i, 3], pname, mem))
+  }
+  
+  invisible()
+}
+
+
+
 print_minimal = function(x)
 {
   gpus = x$gpus
@@ -58,6 +77,12 @@ print_minimal = function(x)
   }
   
   cat("+-------------------------------+----------------------+----------------------+\n")
+  
+  if (!is.null(x$processes))
+  {
+    cat("\n")
+    print_processes(x$processes)
+  }
   
   invisible()
 }
@@ -108,6 +133,12 @@ print_full = function(x)
   }
   
   cat("+-------------------------------+----------------------+----------------------+\n")
+  
+  if (!is.null(x$processes))
+  {
+    cat("\n")
+    print_processes(x$processes)
+  }
   
   invisible()
 }

@@ -136,7 +136,8 @@ device_get_uuid(device)
 High-level interface:
 
 ```r
-smi()
+gpu_processes(type="both")
+smi(processes=TRUE)
 ```
 
 
@@ -145,7 +146,7 @@ smi()
 
 * call `nvsmi_init()` before you do anything
 * call `nvsmi_shutdown()` when you're done
-* device pointers are invalid (but will not obviously be so) after calling `nvsmi_shutdown()`
+* device pointers become invalid (but will not obviously be so) after calling `nvsmi_shutdown()`
 
 Quick example:
 
@@ -168,3 +169,5 @@ device_get_name(d)
 
 nvsmi_shutdown()
 ```
+
+The function `gpu_processes()` is build from the low-level API, so you can look at its source code for another example.

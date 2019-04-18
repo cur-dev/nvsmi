@@ -172,11 +172,11 @@ static inline void device_get_compute_mode(nvmlDevice_t device)
   if (mode == NVML_COMPUTEMODE_DEFAULT)
     strcpy(str, "Default");
   else if (mode == NVML_COMPUTEMODE_EXCLUSIVE_THREAD)
-    strcpy(str, "Exclusive Thread");
+    strcpy(str, "E. Thread");
   else if (mode == NVML_COMPUTEMODE_PROHIBITED)
     strcpy(str, "Prohibited");
   else if (mode == NVML_COMPUTEMODE_EXCLUSIVE_PROCESS)
-    strcpy(str, "Exclusive Process");
+    strcpy(str, "E. Process");
 }
 
 static inline int device_get_count()

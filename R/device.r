@@ -69,6 +69,14 @@ device_get_cuda_compute_capability = function(device)
   .Call(R_device_get_cuda_compute_capability, device)
 }
 
+#' @useDynLib nvsmi R_device_get_compute_running_processes
+#' @rdname device
+#' @export
+device_get_compute_running_processes = function(device)
+{
+  .Call(R_device_get_compute_running_processes, device)
+}
+
 #' @useDynLib nvsmi R_device_get_curr_pcie_link_generation
 #' @rdname device
 #' @export

@@ -7,6 +7,7 @@
 \alias{device_get_compute_mode}
 \alias{device_get_count}
 \alias{device_get_cuda_compute_capability}
+\alias{device_get_compute_running_processes}
 \alias{device_get_curr_pcie_link_generation}
 \alias{device_get_curr_pcie_link_width}
 \alias{device_get_display_active}
@@ -34,6 +35,8 @@ device_get_compute_mode(device)
 device_get_count()
 
 device_get_cuda_compute_capability(device)
+
+device_get_compute_running_processes(device)
 
 device_get_curr_pcie_link_generation(device)
 

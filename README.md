@@ -111,6 +111,7 @@ Device Queries
 device_get_board_part_number(device)
 device_get_brand(device)
 device_get_compute_mode(device)
+device_get_compute_running_processes(device)
 device_get_count()
 device_get_cuda_compute_capability(device)
 device_get_curr_pcie_link_generation(device)

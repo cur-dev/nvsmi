@@ -432,6 +432,43 @@ extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
   return ret;
 }
 
+extern "C" SEXP R_device_get_compute_running_processes(SEXP device_ptr)
+{
+  SEXP ret, ret_names;
+  SEXP ret_pid, ret_memory_used;
+  nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
+  
+  unsigned int size = 0;
+  nvmlProcessInfo_t *infos;
+  nvmlDeviceGetComputeRunningProcesses(*device, &size, infos); // NOTE: do not check error return; it will be NVML_ERROR_INSUFFICIENT_SIZE
+  infos = (nvmlProcessInfo_t*) malloc(size*sizeof(*infos));
+  CHECK_NVML( nvmlDeviceGetComputeRunningProcesses(*device, &size, infos) );
+  
+  PROTECT(ret_pid = allocVector(INTSXP, size));
+  PROTECT(ret_memory_used = allocVector(REALSXP, size));
+  
+  for (int i=0; i<size; i++)
+  {
+    INTEGER(ret_pid)[i] = (int) infos[i].pid;
+    REAL(ret_memory_used)[i] = (double) infos[i].usedGpuMemory;
+  }
+  
+  if (infos != NULL)
+    free(infos);
+  
+  PROTECT(ret = allocVector(VECSXP, 2));
+  PROTECT(ret_names = allocVector(STRSXP, 2));
+  setAttrib(ret, R_NamesSymbol, ret_names);
+  
+  SET_VECTOR_ELT(ret, 0, ret_pid);
+  SET_STRING_ELT(ret_names, 0, mkChar("pid"));
+  SET_VECTOR_ELT(ret, 1, ret_memory_used);
+  SET_STRING_ELT(ret_names, 1, mkChar("memory_used"));
+  
+  UNPROTECT(4);
+  return ret;
+}
+
 extern "C" SEXP R_device_get_count()
 {
   SEXP ret;

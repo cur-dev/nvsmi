@@ -78,7 +78,7 @@ s
 ## +-----------------------------------------------------------------------------+
 ```
 
-In this example we only have one GPU on the system, but data for all GPUs will be shown. Each GPU is a row in a dataframe:
+In this example we only have one GPU on the system, but data for all GPUs will be shown. Each GPU is a row in a dataframe, and each process is listed in a separate dataframe:
 
 ```r
 str(s)

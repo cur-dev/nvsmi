@@ -12,6 +12,7 @@
 \alias{device_get_curr_pcie_link_width}
 \alias{device_get_display_active}
 \alias{device_get_fan_speed}
+\alias{device_get_graphics_running_processes}
 \alias{device_get_handle_by_index}
 \alias{device_get_index}
 \alias{device_get_memory_info}
@@ -45,6 +46,8 @@ device_get_curr_pcie_link_width(device)
 device_get_display_active(device)
 
 device_get_fan_speed(device)
+
+device_get_graphics_running_processes(device)
 
 device_get_handle_by_index(index)
 

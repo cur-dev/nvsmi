@@ -24,6 +24,7 @@ extern SEXP R_device_get_curr_pcie_link_generation();
 extern SEXP R_device_get_curr_pcie_link_width(SEXP device_ptr);
 extern SEXP R_device_get_display_active(SEXP device_ptr);
 extern SEXP R_device_get_fan_speed(SEXP device_ptr);
+extern SEXP R_device_get_graphics_running_processes(SEXP device_ptr);
 extern SEXP R_device_get_handle_by_index(SEXP index);
 extern SEXP R_device_get_index(SEXP device_ptr);
 extern SEXP R_device_get_memory_info(SEXP device_ptr);
@@ -58,6 +59,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"R_device_get_curr_pcie_link_width", (DL_FUNC) &R_device_get_curr_pcie_link_width, 1},
   {"R_device_get_display_active", (DL_FUNC) &R_device_get_display_active, 1},
   {"R_device_get_fan_speed", (DL_FUNC) &R_device_get_fan_speed, 1},
+  {"R_device_get_graphics_running_processes", (DL_FUNC) &R_device_get_graphics_running_processes, 1},
   {"R_device_get_handle_by_index", (DL_FUNC) &R_device_get_handle_by_index, 1},
   {"R_device_get_index", (DL_FUNC) &R_device_get_fan_speed, 1},
   {"R_device_get_memory_info", (DL_FUNC) &R_device_get_memory_info, 1},

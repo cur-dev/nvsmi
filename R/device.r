@@ -111,6 +111,15 @@ device_get_fan_speed = function(device)
   .Call(R_device_get_fan_speed, device)
 }
 
+#' @useDynLib nvsmi R_device_get_graphics_running_processes
+#' @rdname device
+#' @export
+device_get_graphics_running_processes = function(device)
+{
+  check_device_ptr(device)
+  .Call(R_device_get_graphics_running_processes, device)
+}
+
 #' @useDynLib nvsmi R_device_get_handle_by_index
 #' @rdname device
 #' @export

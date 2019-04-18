@@ -70,7 +70,7 @@ print_minimal = function(x)
   cat("+-----------------------------------------------------------------------------+\n")
   cat(sprintf("| Date: %-30s Driver Version: %-23s|\n", x$date, x$version))
   cat("|-------------------------------+----------------------+----------------------+\n")
-  cat("| GPU Name               | Util  Fan  Temp   Perf        Power       Memory   |\n")
+  cat("| GPU Name               | Util  Fan  Temp   Perf        Power         Memory |\n")
   cat("|==========================+==================================================|\n")
   
   for (gpu in 1:ngpus)
@@ -85,7 +85,7 @@ print_minimal = function(x)
     memory_total = gpus[gpu, "memory_total"]/1024/1024
     utilization = gpus[gpu, "utilization"]
     
-    memory = paste0(sprintf(" %5.0f", memory_used), "/", sprintf("%-5.0f", memory_total), " MiB")
+    memory = paste0(sprintf(" %6.0f", memory_used), "/", sprintf("%.0fMiB ", memory_total))
     
     cat(sprintf("| %3d %-18s |", gpu-1L, name))
     cat(sprintf(" %3d%% %3d%%  %3dC  %s", utilization, speed, temp, perf))

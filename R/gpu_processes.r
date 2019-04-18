@@ -58,5 +58,7 @@ gpu_processes = function(type="both")
   
   nvsmi_shutdown()
   
-  df[order(df$GPU, df$PID), ]
+  df = df[order(df$GPU, df$PID), ]
+  class(df) = c("nvidia_processes", "data.frame")
+  df
 }

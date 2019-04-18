@@ -27,17 +27,35 @@ onoff_str = function(s)
 
 print_processes = function(p)
 {
+  type = tolower(getOption("nvsmi_printer", default="full"))
+  if (type != "full" && type != "minimal")
+    stop("'nvsmi_printer' should be one of 'full' or 'minimal'")
+  
   cat("+-----------------------------------------------------------------------------+\n")
-  cat("| Processes:                                                       GPU Memory |\n")
-  cat("|  GPU       PID   Type   Process name                             Usage      |\n")
+  if (type == "full")
+  {
+    cat("| Processes:                                                       GPU Memory |\n")
+    cat("|  GPU       PID   Type   Process name                             Usage      |\n")
+  }
+  else if (type == "minimal")
+  {
+    cat("|  GPU       PID   Type   Process name                               Mem Used |\n")
+  }
+  
   cat("|=============================================================================|\n")
   
-  for (i in 1:nrow(p))
+  n = nrow(p)
+  if (n > 0)
   {
-    pname = dot_str(p[i, 4], 42)
-    mem = p[i, 5]/1024/1024
-    cat(sprintf("|%5d %9d %6s   %-42s %5.0fMiB |\n", p[i, 1], p[i, 2], p[i, 3], pname, mem))
+    for (i in 1:n)
+    {
+      pname = dot_str(p[i, 4], 42)
+      mem = p[i, 5]/1024/1024
+      cat(sprintf("|%5d %9d %6s   %-42s %5.0fMiB |\n", p[i, 1], p[i, 2], p[i, 3], pname, mem))
+    }
   }
+  
+  cat("+-----------------------------------------------------------------------------+\n")
   
   invisible()
 }
@@ -155,12 +173,14 @@ print_full = function(x)
 print.nvidia_smi = function(x, ...)
 {
   type = tolower(getOption("nvsmi_printer", default="full"))
-  if (type == "minimal")
-    print_minimal(x)
-  else if (type == "full")
+  if (type == "full")
     print_full(x)
+  else if (type == "minimal")
+    print_minimal(x)
   else
     stop("'nvsmi_printer' should be one of 'full' or 'minimal'")
+  
+  invisible()
 }
 
 
@@ -177,4 +197,20 @@ print.nvidia_device = function(x, ...)
   index = attr(x, "index")
   ngpus = attr(x, "ngpus")
   cat(paste("A device pointer to GPU", index, "of", ngpus, "\n"))
+  invisible()
+}
+
+
+
+#' print.nvidia_processes
+#' Print \code{nvidia_processes} objects.
+#' @param x
+#' An \code{nvidia_processes} object.
+#' @param ...
+#' Ignored.
+#' @export
+print.nvidia_processes = function(x, ...)
+{
+  print_processes(x)
+  invisible()
 }

@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <string.h>
 #include <nvml.h>
 #include <Rinternals.h>
 
@@ -304,13 +306,13 @@ static inline void device_get_uuid(nvmlDevice_t device)
 // ----------------------------------------------------------------------------
 
 // initialization and cleanup
-extern "C" SEXP R_nvsmi_init()
+SEXP R_nvsmi_init()
 {
   nvml_init();
   return R_NilValue;
 }
 
-extern "C" SEXP R_nvsmi_shutdown()
+SEXP R_nvsmi_shutdown()
 {
   nvml_shutdown();
   return R_NilValue;
@@ -319,7 +321,7 @@ extern "C" SEXP R_nvsmi_shutdown()
 
 
 // system queries
-extern "C" SEXP R_system_get_cuda_driver_version()
+SEXP R_system_get_cuda_driver_version()
 {
   SEXP ret;
   
@@ -330,7 +332,7 @@ extern "C" SEXP R_system_get_cuda_driver_version()
   return ret;
 }
 
-extern "C" SEXP R_system_get_driver_version()
+SEXP R_system_get_driver_version()
 {
   SEXP ret;
   
@@ -346,7 +348,7 @@ extern "C" SEXP R_system_get_driver_version()
   return ret;
 }
 
-extern "C" SEXP R_system_get_nvml_version()
+SEXP R_system_get_nvml_version()
 {
   SEXP ret;
   
@@ -362,7 +364,7 @@ extern "C" SEXP R_system_get_nvml_version()
   return ret;
 }
 
-extern "C" SEXP R_system_get_process_name(SEXP pid)
+SEXP R_system_get_process_name(SEXP pid)
 {
   SEXP ret;
   
@@ -381,7 +383,7 @@ extern "C" SEXP R_system_get_process_name(SEXP pid)
 
 
 // device queries
-extern "C" SEXP R_device_get_board_part_number(SEXP device_ptr)
+SEXP R_device_get_board_part_number(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -398,7 +400,7 @@ extern "C" SEXP R_device_get_board_part_number(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_brand(SEXP device_ptr)
+SEXP R_device_get_brand(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -415,7 +417,7 @@ extern "C" SEXP R_device_get_brand(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
+SEXP R_device_get_compute_mode(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -432,22 +434,22 @@ extern "C" SEXP R_device_get_compute_mode(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_compute_running_processes(SEXP device_ptr)
+SEXP R_device_get_compute_running_processes(SEXP device_ptr)
 {
   SEXP ret, ret_names;
   SEXP ret_pid, ret_memory_used;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
   
   unsigned int size = 0;
-  nvmlProcessInfo_t *infos;
+  nvmlProcessInfo_t *infos = NULL;
   nvmlDeviceGetComputeRunningProcesses(*device, &size, infos); // NOTE: do not check error return; it will be NVML_ERROR_INSUFFICIENT_SIZE
-  infos = (nvmlProcessInfo_t*) malloc(size*sizeof(*infos));
+  infos = malloc(size*sizeof(*infos));
   CHECK_NVML( nvmlDeviceGetComputeRunningProcesses(*device, &size, infos) );
   
   PROTECT(ret_pid = allocVector(INTSXP, size));
   PROTECT(ret_memory_used = allocVector(REALSXP, size));
   
-  for (int i=0; i<size; i++)
+  for (unsigned int i=0; i<size; i++)
   {
     INTEGER(ret_pid)[i] = (int) infos[i].pid;
     REAL(ret_memory_used)[i] = (double) infos[i].usedGpuMemory;
@@ -469,7 +471,7 @@ extern "C" SEXP R_device_get_compute_running_processes(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_count()
+SEXP R_device_get_count()
 {
   SEXP ret;
   
@@ -480,7 +482,7 @@ extern "C" SEXP R_device_get_count()
   return ret;
 }
 
-extern "C" SEXP R_device_get_cuda_compute_capability(SEXP device_ptr)
+SEXP R_device_get_cuda_compute_capability(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -492,7 +494,7 @@ extern "C" SEXP R_device_get_cuda_compute_capability(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_curr_pcie_link_generation(SEXP device_ptr)
+SEXP R_device_get_curr_pcie_link_generation(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -504,7 +506,7 @@ extern "C" SEXP R_device_get_curr_pcie_link_generation(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_curr_pcie_link_width(SEXP device_ptr)
+SEXP R_device_get_curr_pcie_link_width(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -516,7 +518,7 @@ extern "C" SEXP R_device_get_curr_pcie_link_width(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_display_active(SEXP device_ptr)
+SEXP R_device_get_display_active(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -528,7 +530,7 @@ extern "C" SEXP R_device_get_display_active(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_fan_speed(SEXP device_ptr)
+SEXP R_device_get_fan_speed(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -540,22 +542,22 @@ extern "C" SEXP R_device_get_fan_speed(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_graphics_running_processes(SEXP device_ptr)
+SEXP R_device_get_graphics_running_processes(SEXP device_ptr)
 {
   SEXP ret, ret_names;
   SEXP ret_pid, ret_memory_used;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
   
   unsigned int size = 0;
-  nvmlProcessInfo_t *infos;
+  nvmlProcessInfo_t *infos = NULL;
   nvmlDeviceGetGraphicsRunningProcesses(*device, &size, infos); // NOTE: do not check error return; it will be NVML_ERROR_INSUFFICIENT_SIZE
-  infos = (nvmlProcessInfo_t*) malloc(size*sizeof(*infos));
+  infos = malloc(size*sizeof(*infos));
   CHECK_NVML( nvmlDeviceGetGraphicsRunningProcesses(*device, &size, infos) );
   
   PROTECT(ret_pid = allocVector(INTSXP, size));
   PROTECT(ret_memory_used = allocVector(REALSXP, size));
   
-  for (int i=0; i<size; i++)
+  for (unsigned int i=0; i<size; i++)
   {
     INTEGER(ret_pid)[i] = (int) infos[i].pid;
     REAL(ret_memory_used)[i] = (double) infos[i].usedGpuMemory;
@@ -577,10 +579,10 @@ extern "C" SEXP R_device_get_graphics_running_processes(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_handle_by_index(SEXP index)
+SEXP R_device_get_handle_by_index(SEXP index)
 {
   SEXP ret;
-  nvmlDevice_t *device = (nvmlDevice_t*) malloc(sizeof(*device));
+  nvmlDevice_t *device = malloc(sizeof(*device));
   
   *device = device_get_handle_by_index(INTEGER(index)[0]);
   newRptr(device, ret, device_finalize);
@@ -589,7 +591,7 @@ extern "C" SEXP R_device_get_handle_by_index(SEXP index)
   return ret;
 }
 
-extern "C" SEXP R_device_get_index(SEXP device_ptr)
+SEXP R_device_get_index(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -601,7 +603,7 @@ extern "C" SEXP R_device_get_index(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_memory_info(SEXP device_ptr)
+SEXP R_device_get_memory_info(SEXP device_ptr)
 {
   SEXP ret, ret_names;
   SEXP ret_used, ret_total;
@@ -625,7 +627,7 @@ extern "C" SEXP R_device_get_memory_info(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_name(SEXP device_ptr)
+SEXP R_device_get_name(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -642,7 +644,7 @@ extern "C" SEXP R_device_get_name(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_performance_state(SEXP device_ptr)
+SEXP R_device_get_performance_state(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -654,7 +656,7 @@ extern "C" SEXP R_device_get_performance_state(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_persistence_mode(SEXP device_ptr)
+SEXP R_device_get_persistence_mode(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -666,7 +668,7 @@ extern "C" SEXP R_device_get_persistence_mode(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_power_max(SEXP device_ptr)
+SEXP R_device_get_power_max(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -678,7 +680,7 @@ extern "C" SEXP R_device_get_power_max(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_power_usage(SEXP device_ptr)
+SEXP R_device_get_power_usage(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -690,7 +692,7 @@ extern "C" SEXP R_device_get_power_usage(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_serial(SEXP device_ptr)
+SEXP R_device_get_serial(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -707,7 +709,7 @@ extern "C" SEXP R_device_get_serial(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_temperature(SEXP device_ptr)
+SEXP R_device_get_temperature(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -719,7 +721,7 @@ extern "C" SEXP R_device_get_temperature(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_utilization(SEXP device_ptr)
+SEXP R_device_get_utilization(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -731,7 +733,7 @@ extern "C" SEXP R_device_get_utilization(SEXP device_ptr)
   return ret;
 }
 
-extern "C" SEXP R_device_get_uuid(SEXP device_ptr)
+SEXP R_device_get_uuid(SEXP device_ptr)
 {
   SEXP ret;
   nvmlDevice_t *device = (nvmlDevice_t*) getRptr(device_ptr);
@@ -751,7 +753,7 @@ extern "C" SEXP R_device_get_uuid(SEXP device_ptr)
 
 
 // smi
-extern "C" SEXP R_smi()
+SEXP R_smi()
 {
   SEXP ret, ret_names;
   SEXP ret_df, ret_df_names, ret_df_rownames;
@@ -782,7 +784,7 @@ extern "C" SEXP R_smi()
   PROTECT(ret_utilization = allocVector(INTSXP, num_gpus));
   PROTECT(ret_compute_mode = allocVector(STRSXP, num_gpus));
   
-  for (int i=0; i<num_gpus; i++)
+  for (unsigned int i=0; i<num_gpus; i++)
   {
     nvmlDevice_t device = device_get_handle_by_index(i);
     
@@ -826,7 +828,7 @@ extern "C" SEXP R_smi()
   PROTECT(ret_df = allocVector(VECSXP, 13));
   PROTECT(ret_df_names = allocVector(STRSXP, 13));
   PROTECT(ret_df_rownames = allocVector(INTSXP, num_gpus));
-  for (int i=0; i<num_gpus; i++)
+  for (unsigned int i=0; i<num_gpus; i++)
     INTEGER(ret_df_rownames)[i] = i+1;
   
   setAttrib(ret_df, R_NamesSymbol, ret_df_names);

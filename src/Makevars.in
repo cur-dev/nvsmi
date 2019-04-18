@@ -4,16 +4,11 @@ NVCC = @NVCC@
 CUDA_CFLAGS = @CUDA_CFLAGS@
 CUDA_LDFLAGS = @CUDA_LDFLAGS@
 
-PKG_LIBS = $(CUDA_LDFLAGS) -lcudart -lnvidia-ml
+PKG_LIBS = $(CUDA_LDFLAGS) -lnvidia-ml
 
-CUDA_OBJS = nvsmi.o
-C_OBJS = nvsmi_native.o
-OBJECTS = $(CUDA_OBJS) $(C_OBJS)
+OBJECTS = nvsmi.o nvsmi_native.o
 
 all: $(SHLIB)
-
-%.o: %.cu
-	$(NVCC) -DGPU -O2 -x cu -c -arch=sm_61 -Xcompiler "-fPIC $(R_CPPFLAGS)" $< -o $@
 
 
 clean:

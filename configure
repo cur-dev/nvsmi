@@ -584,9 +584,9 @@ PACKAGE_URL=
 ac_unique_file="DESCRIPTION"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-NVCC
 CUDA_LDFLAGS
 CUDA_CFLAGS
+NVCC
 OBJEXT
 EXEEXT
 ac_ct_CC
@@ -637,7 +637,6 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-with_cuda
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1261,11 +1260,6 @@ if test -n "$ac_init_help"; then
 
   cat <<\_ACEOF
 
-Optional Packages:
-  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
-  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
-  --with-cuda=PREFIX      Prefix of your CUDA installation
-
 Some influential environment variables:
   CC          C compiler command
   CFLAGS      C compiler flags
@@ -1392,37 +1386,6 @@ fi
   as_fn_set_status $ac_retval
 
 } # ac_fn_c_try_compile
-
-# ac_fn_c_check_header_compile LINENO HEADER VAR INCLUDES
-# -------------------------------------------------------
-# Tests whether HEADER exists and can be compiled using the include files in
-# INCLUDES, setting the cache variable VAR accordingly.
-ac_fn_c_check_header_compile ()
-{
-  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
-$as_echo_n "checking for $2... " >&6; }
-if eval \${$3+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-$4
-#include <$2>
-_ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
-  eval "$3=yes"
-else
-  eval "$3=no"
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-eval ac_res=\$$3
-	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
-$as_echo "$ac_res" >&6; }
-  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
-
-} # ac_fn_c_check_header_compile
 
 # ac_fn_c_try_link LINENO
 # -----------------------
@@ -1823,7 +1786,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-echo $CC
 
 
 
@@ -1851,7 +1813,6 @@ $as_echo "ok" >&6; }
 fi
 
 
-echo $CC
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -2817,131 +2778,6 @@ if test "x$ac_cv_prog_cc_c99" != xno; then :
 
 fi
 
-
-
-
-
-# Provide your CUDA path with this
-
-# Check whether --with-cuda was given.
-if test "${with_cuda+set}" = set; then :
-  withval=$with_cuda; cuda_prefix=$withval
-else
-  cuda_prefix="/usr/local/cuda"
-fi
-
-
-# Setting the prefix to the default if only --with-cuda was given
-if test "$cuda_prefix" == "yes"; then
-	if test "$withval" == "yes"; then
-		cuda_prefix="/usr/local/cuda"
-	fi
-fi
-
-# Announcing the new variables
-
-
-
-
-# Saving the current flags
-ax_save_CFLAGS="${CFLAGS}"
-ax_save_LDFLAGS="${LDFLAGS}"
-
-# Checking for nvcc
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking nvcc path" >&5
-$as_echo_n "checking nvcc path... " >&6; }
-if test -x "$cuda_prefix/bin/nvcc"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: found in $cuda_prefix/bin" >&5
-$as_echo "found in $cuda_prefix/bin" >&6; }
-	NVCC="${cuda_prefix}/bin/nvcc"
-	CUDA_CFLAGS="-I$cuda_prefix/include"
-	CUDA_LDFLAGS="-L$cuda_prefix/lib64"
-elif test -x "/usr/bin/nvcc"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: found in /usr/bin" >&5
-$as_echo "found in /usr/bin" >&6; }
-	NVCC="/usr/bin/nvcc"
-	CUDA_CFLAGS=""
-	CUDA_LDFLAGS=""
-else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: not found!" >&5
-$as_echo "not found!" >&6; }
-	{ { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "nvcc was not found in $cuda_prefix/bin or /usr/bin
-See \`config.log' for more details" "$LINENO" 5; }
-fi
-
-
-CFLAGS="$CUDA_CFLAGS $CFLAGS"
-LDFLAGS="$CUDA_LDFLAGS $LDFLAGS"
-
-# And the header and the lib
-ac_fn_c_check_header_compile "$LINENO" "cuda.h" "ac_cv_header_cuda_h" "#include <cuda.h>
-"
-if test "x$ac_cv_header_cuda_h" = xyes; then :
-
-else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "Couldn't find cuda.h
-See \`config.log' for more details" "$LINENO" 5; }
-fi
-
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for cudaMalloc in -lcudart" >&5
-$as_echo_n "checking for cudaMalloc in -lcudart... " >&6; }
-if ${ac_cv_lib_cudart_cudaMalloc+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lcudart  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char cudaMalloc ();
-int
-main ()
-{
-return cudaMalloc ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_cudart_cudaMalloc=yes
-else
-  ac_cv_lib_cudart_cudaMalloc=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_cudart_cudaMalloc" >&5
-$as_echo "$ac_cv_lib_cudart_cudaMalloc" >&6; }
-if test "x$ac_cv_lib_cudart_cudaMalloc" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_LIBCUDART 1
-_ACEOF
-
-  LIBS="-lcudart $LIBS"
-
-else
-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "Couldn't find libcuda
-See \`config.log' for more details" "$LINENO" 5; }
-fi
-
-
-# Returning to the original flags
-CFLAGS=${ax_save_CFLAGS}
-LDFLAGS=${ax_save_LDFLAGS}
 
 
 

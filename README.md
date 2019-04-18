@@ -24,7 +24,7 @@ The development version is maintained on GitHub:
 remotes::install_github("wrathematics/nvsmi")
 ```
 
-You will need to have an installation of CUDA to build the package. You can download CUDA from the [nvidia website](https://developer.nvidia.com/cuda-downloads).
+You will need to have NVIDIA's NVML library installed to build the package. NVML is bundled with CUDA, which you can download from the [nvidia website](https://developer.nvidia.com/cuda-downloads).
 
 Also, R must have been compiled with `--enable-R-shlib=yes`. Otherwise, the package probably won't build. 
 

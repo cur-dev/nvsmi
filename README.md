@@ -35,7 +35,7 @@ Also, R must have been compiled with `--enable-R-shlib=yes`. Otherwise, the pack
 ```r
 s = nvsmi::smi()
 s
-## Thu Apr 18 12:19:23 2019 
+## Thu Apr 18 12:32:24 2019 
 ## +-----------------------------------------------------------------------------+
 ## |      R-SMI 390.116                  Driver Version: 390.116                 |
 ## |-------------------------------+----------------------+----------------------+
@@ -43,15 +43,14 @@ s
 ## | Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
 ## |===============================+======================+======================|
 ## |   0  GeForce GTX 107...  Off  | 00000000:08:00.0  On |
-## | 39%   31C    P8    19W / 252W |    480MiB /  8116MiB |     12%      Default |
+## | 39%   34C    P2    47W / 252W |    651MiB /  8116MiB |      0%      Default |
 ## +-------------------------------+----------------------+----------------------+
 ## 
 ## +-----------------------------------------------------------------------------+
 ## | Processes:                                                       GPU Memory |
 ## |  GPU       PID   Type   Process name                             Usage      |
 ## |=============================================================================|
-## |    0      1781      G   /usr/lib/xorg/Xorg                           314MiB |
-## |    0     25845      G   /usr/share/atom/atom --type=gpu-process...    79MiB |
+## |    0      1781      G   /usr/lib/xorg/Xorg                           243MiB |
 ## |    0     26253      G   /opt/google/chrome/chrome --type=gpu-pr...    85MiB |
 ## +-----------------------------------------------------------------------------+
 ```
@@ -62,18 +61,17 @@ The default print method mimics the `nvidia-smi` utility. But there is also a "m
 options("nvsmi_printer"="minimal")
 s
 ## +-----------------------------------------------------------------------------+
-## | Date: Thu Apr 18 12:19:22 2019       Driver Version: 390.116                |
+## | Date: Thu Apr 18 12:29:51 2019       Driver Version: 390.116                |
 ## |-------------------------------+----------------------+----------------------+
 ## | GPU Name               | Util  Fan  Temp   Perf        Power       Memory   |
 ## |==========================+==================================================|
-## |   0 GeForce GTX 107... |  12%  39%   31C     P8     19W/252W   480/8116  MiB|
+## |   0 GeForce GTX 107... |   0%  39%   34C     P2     47W/252W   651/8116  MiB|
 ## +-------------------------------+----------------------+----------------------+
 ## 
 ## +-----------------------------------------------------------------------------+
 ## |  GPU       PID   Type   Process name                               Mem Used |
 ## |=============================================================================|
-## |    0      1781      G   /usr/lib/xorg/Xorg                           314MiB |
-## |    0     25845      G   /usr/share/atom/atom --type=gpu-process...    79MiB |
+## |    0      1781      G   /usr/lib/xorg/Xorg                           243MiB |
 ## |    0     26253      G   /opt/google/chrome/chrome --type=gpu-pr...    85MiB |
 ## +-----------------------------------------------------------------------------+
 ```
@@ -84,27 +82,27 @@ In this example we only have one GPU on the system, but data for all GPUs will b
 str(s)
 ## List of 4
 ##  $ version  : chr "390.116"
-##  $ date     : chr "Thu Apr 18 12:19:22 2019"
+##  $ date     : chr "Thu Apr 18 12:29:51 2019"
 ##  $ gpus     :'data.frame':	1 obs. of  13 variables:
 ##   ..$ name            : chr "GeForce GTX 1070 Ti"
 ##   ..$ busid           : chr "00000000:08:00.0"
 ##   ..$ persistence_mode: logi FALSE
 ##   ..$ disp            : logi TRUE
 ##   ..$ speed           : int 39
-##   ..$ temp            : int 31
-##   ..$ perf            : int 8
-##   ..$ power           : int 18609
+##   ..$ temp            : int 34
+##   ..$ perf            : int 2
+##   ..$ power           : int 46942
 ##   ..$ power_max       : int 252000
-##   ..$ memory_used     : num 5.04e+08
+##   ..$ memory_used     : num 6.83e+08
 ##   ..$ memory_total    : num 8.51e+09
-##   ..$ utilization     : int 12
+##   ..$ utilization     : int 0
 ##   ..$ compute_mode    : chr "Default"
-##  $ processes:Classes ‘nvidia_processes’ and 'data.frame':	3 obs. of  5 variables:
-##   ..$ GPU    : int [1:3] 0 0 0
-##   ..$ PID    : int [1:3] 1781 25845 26253
-##   ..$ Type   : chr [1:3] "G" "G" "G"
-##   ..$ Process: chr [1:3] "/usr/lib/xorg/Xorg" "/usr/share/atom/atom --type=gpu-process --no-sandbox --supports" "/opt/google/chrome/chrome --type=gpu-process --field-trial-hand"
-##   ..$ Memory : num [1:3] 3.29e+08 8.27e+07 8.89e+07
+##  $ processes:Classes ‘nvidia_processes’ and 'data.frame':	2 obs. of  5 variables:
+##   ..$ GPU    : int [1:2] 0 0
+##   ..$ PID    : int [1:2] 1781 26253
+##   ..$ Type   : chr [1:2] "G" "G"
+##   ..$ Process: chr [1:2] "/usr/lib/xorg/Xorg" "/opt/google/chrome/chrome --type=gpu-process --field-trial-hand"
+##   ..$ Memory : num [1:2] 2.55e+08 8.89e+07
 ##  - attr(*, "class")= chr "nvidia_smi"
 ```
 

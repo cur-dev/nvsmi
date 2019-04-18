@@ -84,7 +84,7 @@ static inline void check_nvml_ret(nvmlReturn_t check)
     else if (check == NVML_ERROR_UNKNOWN)
       error("unknown NVML error");
     else
-      error("something went wrong, but I don't know what");
+      error(nvmlErrorString(check));
   }
 }
 

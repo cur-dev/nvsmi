@@ -12,21 +12,13 @@ This works via NVML, and does not require the `nvidia-smi` utility to be install
 
 ## Installation
 
-<!-- To install the R package, run:
-
-```r
-install.package("nvsmi")
-``` -->
-
 The development version is maintained on GitHub:
 
 ```r
 remotes::install_github("wrathematics/nvsmi")
 ```
 
-You will need to have NVIDIA's NVML library installed to build the package. NVML is bundled with CUDA, which you can download from the [nvidia website](https://developer.nvidia.com/cuda-downloads).
-
-Also, R must have been compiled with `--enable-R-shlib=yes`. Otherwise, the package probably won't build. 
+You will need to have NVIDIA's NVML library installed to build the package. NVML is bundled with CUDA, which you can download from the [nvidia website](https://developer.nvidia.com/cuda-downloads). You can specify the nvml.h and libnvidia-ml.so paths with the configure-args `--with-nvml-include` and `--with-nvml-lib`, respectively.
 
 
 

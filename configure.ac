@@ -13,12 +13,12 @@ AC_PROG_CC_C99
 
 
 AC_ARG_WITH(nvml-include,
-  [  --with-nvml-include=PREFIX      Location of nvml.h],
+  [  --with-nvml-include=DIR Location of nvml.h],
   [nvml_include=$withval],
   [nvml_include=""])
 
 AC_ARG_WITH(nvml-lib,
-  [  --with-nvml-lib=PREFIX      Location of libnvidia-ml.so],
+  [  --with-nvml-lib=DIR     Location of libnvidia-ml.so],
   [nvml_lib=$withval],
   [nvml_lib=""])
 

@@ -1,15 +1,8 @@
-R_CPPFLAGS = @R_CPPFLAGS@
-
-NVCC = @NVCC@
-CUDA_CFLAGS = @CUDA_CFLAGS@
-CUDA_LDFLAGS = @CUDA_LDFLAGS@
-
-PKG_LIBS = $(CUDA_LDFLAGS) -lnvidia-ml
-
+PKG_CPPFLAGS = @nvml_include@
+PKG_LIBS = @nvml_lib@ -lnvidia-ml
 OBJECTS = nvsmi.o nvsmi_native.o
 
 all: $(SHLIB)
-
 
 clean:
 	@rm -rf *.o *.so *.dll Makevars $(USER_CONF) $(SHLIB) $(OBJECTS)

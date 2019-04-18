@@ -77,6 +77,7 @@ print_minimal = function(x)
   {
     name = dot_str(gpus[gpu, "name"], 18)
     speed = gpus[gpu, "speed"]
+    speed = ifelse(is.na(speed), sprintf(" N/A"), sprintf("%3d%%", speed))
     temp = gpus[gpu, "temp"]
     perf = perf_str(gpus[gpu, "perf"])
     power = gpus[gpu, "power"]/1000
@@ -88,7 +89,7 @@ print_minimal = function(x)
     memory = paste0(sprintf(" %6.0f", memory_used), "/", sprintf("%.0fMiB ", memory_total))
     
     cat(sprintf("| %3d %-18s |", gpu-1L, name))
-    cat(sprintf(" %3d%% %3d%%  %3dC  %s", utilization, speed, temp, perf))
+    cat(sprintf(" %3d%% %s  %3dC  %s", utilization, speed, temp, perf))
     cat(sprintf("  %3.0fW/%3.0fW", power, power_max))
     cat(memory)
     cat("|\n")
@@ -134,11 +135,12 @@ print_full = function(x)
     cat("|\n")
     
     speed = gpus[gpu, "speed"]
+    speed = ifelse(is.na(speed), sprintf(" N/A"), sprintf("%3d%%", speed))
     temp = gpus[gpu, "temp"]
     perf = perf_str(gpus[gpu, "perf"])
     power = gpus[gpu, "power"]/1000
     power_max = gpus[gpu, "power_max"]/1000
-    cat(sprintf("|%3d%%  %3dC %s %3.0fW / %3.0fW ", speed, temp, perf, power, power_max))
+    cat(sprintf("|%s  %3dC %s %3.0fW / %3.0fW ", speed, temp, perf, power, power_max))
     
     memory_used = gpus[gpu, "memory_used"]/1024/1024
     memory_total = gpus[gpu, "memory_total"]/1024/1024

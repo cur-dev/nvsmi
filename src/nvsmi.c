@@ -215,7 +215,12 @@ static inline int device_get_display_active(nvmlDevice_t device)
 static inline int device_get_fan_speed(nvmlDevice_t device)
 {
   unsigned int speed;
-  CHECK_NVML( nvmlDeviceGetFanSpeed(device, &speed) );
+  nvmlReturn_t check = nvmlDeviceGetFanSpeed(device, &speed);
+  if (check == NVML_ERROR_NOT_SUPPORTED)
+    return INT_MIN;
+  else
+    CHECK_NVML(check);
+  
   return (int) speed;
 }
 

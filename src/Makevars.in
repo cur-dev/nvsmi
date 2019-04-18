@@ -1,5 +1,5 @@
-PKG_CPPFLAGS = @nvml_include@
-PKG_LIBS = @nvml_lib@ -lnvidia-ml
+PKG_CPPFLAGS = -I@nvml_include@
+PKG_LIBS = -L@nvml_lib@ -lnvidia-ml
 OBJECTS = nvsmi.o nvsmi_native.o
 
 all: $(SHLIB)

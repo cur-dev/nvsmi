@@ -3445,7 +3445,7 @@ fi
 CPPFLAGS=${save_CPPFLAGS}
 
 if test "X${nvml_lib}" != "X"; then
-  LDFLAGS="${LDFLAGS} -I${nvml_lib}"
+  LDFLAGS="${LDFLAGS} -L${nvml_lib}"
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for nvmlInit in -lnvidia-ml" >&5

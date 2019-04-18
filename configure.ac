@@ -37,7 +37,7 @@ AC_CHECK_HEADER(nvml.h, [], [
 CPPFLAGS=${save_CPPFLAGS}
 
 if test "X${nvml_lib}" != "X"; then
-  LDFLAGS="${LDFLAGS} -I${nvml_lib}"
+  LDFLAGS="${LDFLAGS} -L${nvml_lib}"
 fi
 
 AC_CHECK_LIB(nvidia-ml, nvmlInit, [], [

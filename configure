@@ -621,8 +621,8 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-nvml_lib
-nvml_include
+NVML_LIB
+NVML_INCLUDE
 EGREP
 GREP
 CPP
@@ -3030,7 +3030,8 @@ save_CPPFLAGS="${CPPFLAGS}"
 save_LDFLAGS="${LDFLAGS}"
 
 if test "X${nvml_include}" != "X"; then
-  CPPFLAGS="${CPPFLAGS} -I${nvml_include}"
+  NVML_INCLUDE="-I${nvml_include}"
+  CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
 fi
 
 
@@ -3445,7 +3446,8 @@ fi
 CPPFLAGS=${save_CPPFLAGS}
 
 if test "X${nvml_lib}" != "X"; then
-  LDFLAGS="${LDFLAGS} -L${nvml_lib}"
+  NVML_LIB="-L${nvml_lib}"
+  LDFLAGS="${LDFLAGS} ${NVML_LIB}"
 fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for nvmlInit in -lnvidia-ml" >&5
@@ -3504,8 +3506,8 @@ LDFLAGS=${save_LDFLAGS}
 echo " "
 echo "****************** Results of nvsmi package configure ******************"
 echo "* NVML:"
-echo "    >> nvml_include=${nvml_include}"
-echo "    >> nvml_lib=${nvml_lib}"
+echo "    >> nvml_include=${NVML_INCLUDE}"
+echo "    >> nvml_lib=${NVML_LIB}"
 echo "************************************************************************"
 echo " "
 

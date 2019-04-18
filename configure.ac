@@ -27,7 +27,8 @@ save_CPPFLAGS="${CPPFLAGS}"
 save_LDFLAGS="${LDFLAGS}"
 
 if test "X${nvml_include}" != "X"; then
-  CPPFLAGS="${CPPFLAGS} -I${nvml_include}"
+  NVML_INCLUDE="-I${nvml_include}"
+  CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
 fi
 
 AC_CHECK_HEADER(nvml.h, [], [
@@ -37,7 +38,8 @@ AC_CHECK_HEADER(nvml.h, [], [
 CPPFLAGS=${save_CPPFLAGS}
 
 if test "X${nvml_lib}" != "X"; then
-  LDFLAGS="${LDFLAGS} -L${nvml_lib}"
+  NVML_LIB="-L${nvml_lib}"
+  LDFLAGS="${LDFLAGS} ${NVML_LIB}"
 fi
 
 AC_CHECK_LIB(nvidia-ml, nvmlInit, [], [
@@ -50,14 +52,14 @@ LDFLAGS=${save_LDFLAGS}
 echo " "
 echo "****************** Results of nvsmi package configure ******************"
 echo "* NVML:"
-echo "    >> nvml_include=${nvml_include}"
-echo "    >> nvml_lib=${nvml_lib}"
+echo "    >> nvml_include=${NVML_INCLUDE}"
+echo "    >> nvml_lib=${NVML_LIB}"
 echo "************************************************************************"
 echo " "
 
 
 
 dnl Start to substitute templates
-AC_SUBST(nvml_include)
-AC_SUBST(nvml_lib)
+AC_SUBST(NVML_INCLUDE)
+AC_SUBST(NVML_LIB)
 AC_OUTPUT(src/Makevars)

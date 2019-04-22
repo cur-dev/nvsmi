@@ -3,11 +3,14 @@
 * **Version:** 0.1-0
 * **License:** [BSD 2-Clause](http://opensource.org/licenses/BSD-2-Clause)
 * **Author:** Drew Schmidt
+* **Project home**: https://github.com/wrathematics/nvsmi
+* **Bug reports**: https://github.com/wrathematics/nvsmi/issues
 
 
-An `nvidia-smi`-like interface for R.
+An `nvidia-smi`-like interface for R. This works via NVML, and does not actually require the `nvidia-smi` utility to be installed or in your `$PATH` (although it probably will be anyway if NVML is installed).
 
-This works via NVML, and does not require the `nvidia-smi` utility to be installed. Eventually the package will feature a full NVML interface.
+Currently the package has most (all?) of the useful NVML "get" functions available, as well as a few high-level interfaces (see the API section below). More NVML wrappers will be added over time (if you want one, feel free to ask for it, or better yet, submit a PR). At this time I have no plans to add the "set" functions, because these require root and I think it's a monstrously bad idea to give an R process root.
+
 
 
 ## Installation
@@ -18,7 +21,13 @@ The development version is maintained on GitHub:
 remotes::install_github("wrathematics/nvsmi")
 ```
 
-You will need to have NVIDIA's NVML library installed to build the package. NVML is bundled with CUDA, which you can download from the [nvidia website](https://developer.nvidia.com/cuda-downloads). You can specify the nvml.h and libnvidia-ml.so paths with the configure-args `--with-nvml-include` and `--with-nvml-lib`, respectively.
+You will need to have NVIDIA's NVML library installed to build the package. NVML is bundled with CUDA, which you can download from the [NVIDIA website](https://developer.nvidia.com/cuda-downloads).
+
+The package needs to be able to find `nvml.h` and `libnvidia-ml.so`, whose paths you can specify with the configure-args `--with-nvml-include` and `--with-nvml-lib`, respectively. We also recommend setting `/usr/local/cuda/` as a link to your latest CUDA installation, which is an option when you install CUDA via the runfile (and should automatically happen if you use the .deb or .rpm). 
+
+If you have trouble building the package, please open an issue with an output of the package configure (what you see when you run `./configure`), as well as the locations of `nvml.h` and `libnvidia-ml.so` on your system.
+
+I have literally no idea how to get this to work on Windows at this time.
 
 
 

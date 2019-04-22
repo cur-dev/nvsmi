@@ -9,6 +9,8 @@ fi
 CC=`"${R_HOME}/bin/R" CMD config CC`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
+
+AC_LANG(C)
 AC_PROG_CC_C99
 
 
@@ -23,30 +25,27 @@ AC_ARG_WITH(nvml-lib,
   [nvml_lib=""])
 
 
-save_CPPFLAGS="${CPPFLAGS}"
-save_LDFLAGS="${LDFLAGS}"
+for include_path in "${nvml_include}" "/usr/local/cuda/include"; do
+  AC_MSG_NOTICE([checking for nvml.h in path=\"$include_path\"])
+  AX_CHECK_NVML_INCLUDE()
+  test "X$ac_cv_header_nvml_h" != "Xyes" || break
+done
 
-if test "X${nvml_include}" != "X"; then
-  NVML_INCLUDE="-I${nvml_include}"
-  CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
-fi
-
-AC_CHECK_HEADER(nvml.h, [], [
+if test "X${ac_cv_header_nvml_h}" != "Xyes"; then
   AC_MSG_ERROR([could not find nvml.h])
-])
-
-CPPFLAGS=${save_CPPFLAGS}
-
-if test "X${nvml_lib}" != "X"; then
-  NVML_LIB="-L${nvml_lib}"
-  LDFLAGS="${LDFLAGS} ${NVML_LIB}"
 fi
 
-AC_CHECK_LIB(nvidia-ml, nvmlInit, [], [
-  AC_MSG_ERROR([could not find libnvidia-ml])
-])
 
-LDFLAGS=${save_LDFLAGS}
+for lib_path in "${nvml_lib}" "/usr/local/cuda/lib64" "/usr/lib64/nvidia/"; do
+  AC_MSG_NOTICE([checking for libnvidia-ml.so in path=\"$lib_path\"])
+  AX_CHECK_NVML_LIB()
+  test "X$ac_cv_lib_nvidia_ml_nvmlInit" != "Xyes" || break
+done
+
+if test "X$ac_cv_lib_nvidia_ml_nvmlInit" != "Xyes"; then
+  AC_MSG_ERROR([could not find libnvidia-ml.so])
+fi
+
 
 # Report
 echo " "

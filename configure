@@ -622,10 +622,11 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 NVML_LIB
-NVML_INCLUDE
 EGREP
 GREP
 CPP
+NVML_INCLUDE_FOUND
+NVML_INCLUDE
 OBJEXT
 EXEEXT
 ac_ct_CC
@@ -2039,6 +2040,13 @@ fi
 CC=`"${R_HOME}/bin/R" CMD config CC`
 CPPFLAGS=`"${R_HOME}/bin/R" CMD config CPPFLAGS`
 LDFLAGS=`"${R_HOME}/bin/R" CMD config LDFLAGS`
+
+ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3026,14 +3034,34 @@ fi
 
 
 
-save_CPPFLAGS="${CPPFLAGS}"
-save_LDFLAGS="${LDFLAGS}"
+# save_CPPFLAGS="${CPPFLAGS}"
+# save_LDFLAGS="${LDFLAGS}"
+#
+# if test "X${nvml_include}" != "X"; then
+#   NVML_INCLUDE="-I${nvml_include}"
+#   CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
+# fi
+#
+# AC_CHECK_HEADER(nvml.h, [], [
+#   AC_MSG_ERROR([could not find nvml.h])
+# ])
+#
+# CPPFLAGS=${save_CPPFLAGS}
+#
+# if test "X${nvml_lib}" != "X"; then
+#   NVML_LIB="-L${nvml_lib}"
+#   LDFLAGS="${LDFLAGS} ${NVML_LIB}"
+# fi
+#
+# AC_CHECK_LIB(nvidia-ml, nvmlInit, [], [
+#   AC_MSG_ERROR([could not find libnvidia-ml])
+# ])
+#
+# LDFLAGS=${save_LDFLAGS}
 
-if test "X${nvml_include}" != "X"; then
-  NVML_INCLUDE="-I${nvml_include}"
-  CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
-fi
-
+for include_path in "${nvml_include}" "/usr/local/cuda/include"; do
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for nvml.h in path=\"$include_path\"" >&5
+$as_echo "$as_me: checking for nvml.h in path=\"$include_path\"" >&6;}
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -3432,24 +3460,56 @@ fi
 done
 
 
+
+
+
+
+
+ax_save_CPPFLAGS="${CPPFLAGS}"
+
+if test "X$include_path" = "X"; then
+  NVML_INCLUDE=""
+else
+  NVML_INCLUDE="-I$include_path"
+  CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
+fi
+
+unset ac_cv_header_nvml_h
 ac_fn_c_check_header_mongrel "$LINENO" "nvml.h" "ac_cv_header_nvml_h" "$ac_includes_default"
 if test "x$ac_cv_header_nvml_h" = xyes; then :
 
-else
-
-  as_fn_error $? "could not find nvml.h" "$LINENO" 5
-
 fi
 
 
 
-CPPFLAGS=${save_CPPFLAGS}
+CPPFLAGS=${ax_save_CPPFLAGS}
 
-if test "X${nvml_lib}" != "X"; then
-  NVML_LIB="-L${nvml_lib}"
+
+  test "X$ac_cv_header_nvml_h" != "Xyes" || break
+done
+
+if test "X${ac_cv_header_nvml_h}" != "Xyes"; then
+  as_fn_error $? "could not find nvml.h" "$LINENO" 5
+fi
+
+
+for lib_path in "${nvml_lib}" "/usr/local/cuda/lib64" "/usr/lib64/nvidia/"; do
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnvidia-ml.so in path=\"$lib_path\"" >&5
+$as_echo "$as_me: checking for libnvidia-ml.so in path=\"$lib_path\"" >&6;}
+
+
+
+
+ax_save_LDFLAGS="${LDFLAGS}"
+
+if test "X$lib_path" = "X"; then
+  NVML_LIB=""
+else
+  NVML_LIB="-L$lib_path"
   LDFLAGS="${LDFLAGS} ${NVML_LIB}"
 fi
 
+unset ac_cv_lib_nvidia_ml_nvmlInit
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for nvmlInit in -lnvidia-ml" >&5
 $as_echo_n "checking for nvmlInit in -lnvidia-ml... " >&6; }
 if ${ac_cv_lib_nvidia_ml_nvmlInit+:} false; then :
@@ -3493,14 +3553,19 @@ _ACEOF
 
   LIBS="-lnvidia-ml $LIBS"
 
-else
-
-  as_fn_error $? "could not find libnvidia-ml" "$LINENO" 5
-
 fi
 
 
-LDFLAGS=${save_LDFLAGS}
+LDFLAGS=${ax_save_LDFLAGS}
+
+
+  test "X$ac_cv_lib_nvidia_ml_nvmlInit" != "Xyes" || break
+done
+
+if test "X$ac_cv_lib_nvidia_ml_nvmlInit" != "Xyes"; then
+  as_fn_error $? "could not find libnvidia-ml.so" "$LINENO" 5
+fi
+
 
 # Report
 echo " "

@@ -625,7 +625,6 @@ NVML_LIB
 EGREP
 GREP
 CPP
-NVML_INCLUDE_FOUND
 NVML_INCLUDE
 OBJEXT
 EXEEXT
@@ -3034,31 +3033,6 @@ fi
 
 
 
-# save_CPPFLAGS="${CPPFLAGS}"
-# save_LDFLAGS="${LDFLAGS}"
-#
-# if test "X${nvml_include}" != "X"; then
-#   NVML_INCLUDE="-I${nvml_include}"
-#   CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
-# fi
-#
-# AC_CHECK_HEADER(nvml.h, [], [
-#   AC_MSG_ERROR([could not find nvml.h])
-# ])
-#
-# CPPFLAGS=${save_CPPFLAGS}
-#
-# if test "X${nvml_lib}" != "X"; then
-#   NVML_LIB="-L${nvml_lib}"
-#   LDFLAGS="${LDFLAGS} ${NVML_LIB}"
-# fi
-#
-# AC_CHECK_LIB(nvidia-ml, nvmlInit, [], [
-#   AC_MSG_ERROR([could not find libnvidia-ml])
-# ])
-#
-# LDFLAGS=${save_LDFLAGS}
-
 for include_path in "${nvml_include}" "/usr/local/cuda/include"; do
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for nvml.h in path=\"$include_path\"" >&5
 $as_echo "$as_me: checking for nvml.h in path=\"$include_path\"" >&6;}
@@ -3464,7 +3438,6 @@ done
 
 
 
-
 ax_save_CPPFLAGS="${CPPFLAGS}"
 
 if test "X$include_path" = "X"; then
@@ -3493,6 +3466,43 @@ if test "X${ac_cv_header_nvml_h}" != "Xyes"; then
 fi
 
 
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether C compiler accepts -Wl,-rpath" >&5
+$as_echo_n "checking whether C compiler accepts -Wl,-rpath... " >&6; }
+if ${ax_cv_check_cflags___Wl__rpath+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+  ax_check_save_flags=$CFLAGS
+  CFLAGS="$CFLAGS  -Wl,-rpath"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ax_cv_check_cflags___Wl__rpath=yes
+else
+  ax_cv_check_cflags___Wl__rpath=no
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  CFLAGS=$ax_check_save_flags
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cflags___Wl__rpath" >&5
+$as_echo "$ax_cv_check_cflags___Wl__rpath" >&6; }
+if test "x$ax_cv_check_cflags___Wl__rpath" = xyes; then :
+  USE_RPATH="yes"
+else
+  USE_RPATH="no"
+fi
+
+
 for lib_path in "${nvml_lib}" "/usr/local/cuda/lib64" "/usr/lib64/nvidia/"; do
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnvidia-ml.so in path=\"$lib_path\"" >&5
 $as_echo "$as_me: checking for libnvidia-ml.so in path=\"$lib_path\"" >&6;}
@@ -3506,6 +3516,9 @@ if test "X$lib_path" = "X"; then
   NVML_LIB=""
 else
   NVML_LIB="-L$lib_path"
+  if test "X$USE_RPATH" = "Xyes"; then
+    NVML_LIB="$NVML_LIB -Wl,-rpath=$lib_path"
+  fi
   LDFLAGS="${LDFLAGS} ${NVML_LIB}"
 fi
 
@@ -3565,6 +3578,7 @@ done
 if test "X$ac_cv_lib_nvidia_ml_nvmlInit" != "Xyes"; then
   as_fn_error $? "could not find libnvidia-ml.so" "$LINENO" 5
 fi
+
 
 
 # Report

@@ -36,6 +36,9 @@ if test "X${ac_cv_header_nvml_h}" != "Xyes"; then
 fi
 
 
+
+AX_CHECK_COMPILE_FLAG([-Wl,-rpath], [USE_RPATH="yes"], [USE_RPATH="no"], [], [])
+
 for lib_path in "${nvml_lib}" "/usr/local/cuda/lib64" "/usr/lib64/nvidia/"; do
   AC_MSG_NOTICE([checking for libnvidia-ml.so in path=\"$lib_path\"])
   AX_CHECK_NVML_LIB()
@@ -45,6 +48,7 @@ done
 if test "X$ac_cv_lib_nvidia_ml_nvmlInit" != "Xyes"; then
   AC_MSG_ERROR([could not find libnvidia-ml.so])
 fi
+
 
 
 # Report

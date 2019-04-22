@@ -8,6 +8,9 @@ if test "X$lib_path" = "X"; then
   NVML_LIB=""
 else
   NVML_LIB="-L$lib_path"
+  if test "X$USE_RPATH" = "Xyes"; then
+    NVML_LIB="$NVML_LIB -Wl,-rpath=$lib_path"
+  fi
   LDFLAGS="${LDFLAGS} ${NVML_LIB}"
 fi
 

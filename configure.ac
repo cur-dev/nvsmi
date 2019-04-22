@@ -27,7 +27,7 @@ AC_ARG_WITH(nvml-lib,
 
 for include_path in "${nvml_include}" "/usr/local/cuda/include"; do
   AC_MSG_NOTICE([checking for nvml.h in path=\"$include_path\"])
-  AX_CHECK_NVML_INCLUDE()
+  AX_CHECK_NVML_INCLUDE([$include_path])
   test "X$ac_cv_header_nvml_h" != "Xyes" || break
 done
 
@@ -37,11 +37,11 @@ fi
 
 
 
-AX_CHECK_COMPILE_FLAG([-Wl,-rpath], [USE_RPATH="yes"], [USE_RPATH="no"], [], [])
+AX_CHECK_COMPILE_FLAG([-Wl,-rpath], [use_rpath="yes"], [use_rpath="no"], [], [])
 
 for lib_path in "${nvml_lib}" "/usr/local/cuda/lib64" "/usr/lib64/nvidia/"; do
-  AC_MSG_NOTICE([checking for libnvidia-ml.so in path=\"$lib_path\"])
-  AX_CHECK_NVML_LIB()
+  AC_MSG_NOTICE([checking if libnvidia-ml.so is  in path=\"$lib_path\"])
+  AX_CHECK_NVML_LIB([$lib_path], [$use_rpath])
   test "X$ac_cv_lib_nvidia_ml_nvmlInit" != "Xyes" || break
 done
 

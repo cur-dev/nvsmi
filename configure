@@ -3439,11 +3439,12 @@ done
 
 
 ax_save_CPPFLAGS="${CPPFLAGS}"
+INCLUDE_PATH=$include_path
 
-if test "X$include_path" = "X"; then
+if test "X$INCLUDE_PATH" = "X"; then
   NVML_INCLUDE=""
 else
-  NVML_INCLUDE="-I$include_path"
+  NVML_INCLUDE="-I$INCLUDE_PATH"
   CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
 fi
 
@@ -3497,27 +3498,29 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ax_cv_check_cflags___Wl__rpath" >&5
 $as_echo "$ax_cv_check_cflags___Wl__rpath" >&6; }
 if test "x$ax_cv_check_cflags___Wl__rpath" = xyes; then :
-  USE_RPATH="yes"
+  use_rpath="yes"
 else
-  USE_RPATH="no"
+  use_rpath="no"
 fi
 
 
 for lib_path in "${nvml_lib}" "/usr/local/cuda/lib64" "/usr/lib64/nvidia/"; do
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for libnvidia-ml.so in path=\"$lib_path\"" >&5
-$as_echo "$as_me: checking for libnvidia-ml.so in path=\"$lib_path\"" >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking if libnvidia-ml.so is  in path=\"$lib_path\"" >&5
+$as_echo "$as_me: checking if libnvidia-ml.so is  in path=\"$lib_path\"" >&6;}
 
 
 
 
 ax_save_LDFLAGS="${LDFLAGS}"
+LIB_PATH=$lib_path
+USE_RPATH=$use_rpath
 
-if test "X$lib_path" = "X"; then
+if test "X$LIB_PATH" = "X"; then
   NVML_LIB=""
 else
-  NVML_LIB="-L$lib_path"
+  NVML_LIB="-L$LIB_PATH"
   if test "X$USE_RPATH" = "Xyes"; then
-    NVML_LIB="$NVML_LIB -Wl,-rpath=$lib_path"
+    NVML_LIB="$NVML_LIB -Wl,-rpath=$LIB_PATH"
   fi
   LDFLAGS="${LDFLAGS} ${NVML_LIB}"
 fi

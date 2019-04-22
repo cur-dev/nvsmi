@@ -3,11 +3,12 @@ AC_DEFUN([AX_CHECK_NVML_INCLUDE], [
 AC_SUBST([NVML_INCLUDE])
 
 ax_save_CPPFLAGS="${CPPFLAGS}"
+INCLUDE_PATH=$1
 
-if test "X$include_path" = "X"; then
+if test "X$INCLUDE_PATH" = "X"; then
   NVML_INCLUDE=""
 else
-  NVML_INCLUDE="-I$include_path"
+  NVML_INCLUDE="-I$INCLUDE_PATH"
   CPPFLAGS="${CPPFLAGS} ${NVML_INCLUDE}"
 fi
 

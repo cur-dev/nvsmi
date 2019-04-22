@@ -23,7 +23,7 @@ remotes::install_github("wrathematics/nvsmi")
 
 You will need to have NVIDIA's NVML library installed to build the package. NVML is bundled with CUDA, which you can download from the [NVIDIA website](https://developer.nvidia.com/cuda-downloads).
 
-The package needs to be able to find `nvml.h` and `libnvidia-ml.so`, whose paths you can specify with the configure-args `--with-nvml-include` and `--with-nvml-lib`, respectively. We also recommend setting `/usr/local/cuda/` as a link to your latest CUDA installation, which is an option when you install CUDA via the runfile (and should automatically happen if you use the .deb or .rpm). 
+The package needs to be able to find `nvml.h` and `libnvidia-ml.so`. We try looking in several locations for these files, but you can manually specify the paths for the header and library with the configure-args `--with-nvml-include` and `--with-nvml-lib`, respectively. We also recommend setting `/usr/local/cuda/` as a link to your latest CUDA installation, which is an option when you install CUDA via the runfile (and should automatically happen if you use the .deb or .rpm). 
 
 If you have trouble building the package, please open an issue with an output of the package configure (what you see when you run `./configure`), as well as the locations of `nvml.h` and `libnvidia-ml.so` on your system.
 
